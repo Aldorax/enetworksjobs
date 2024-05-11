@@ -23,7 +23,7 @@ export function MenuHamburger({ children }: IProps) {
       <button
         ref={menuButtonRef}
         onClick={toggleNavVisible}
-        className="hamb--squeeze z-50 h-6 w-7 cursor-pointer transition-all duration-1000 hover:opacity-90 sm:hidden bg-gray-900 text-gray-800"
+        className="hamb--squeeze z-50 h-6 w-7 cursor-pointer bg-gray-900 text-gray-800 transition-all duration-1000 hover:opacity-90 sm:hidden"
         type="button"
       >
         <span className="hamb-box cursor-pointer">

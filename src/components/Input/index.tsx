@@ -10,7 +10,7 @@ export function Input() {
         className="ml-5 w-full bg-gray-900 text-gray-100 outline-0"
         placeholder={texts.TYPE_YOUR_EMAIL}
       />
-      <Button variant={{ type: "contained" }}>{texts.FREE_TRIAL}</Button>
+      <Button variant={{ type: "contained" }}>{texts.APPLY}</Button>
     </div>
   );
 }

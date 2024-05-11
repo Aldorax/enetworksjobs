@@ -1,5 +1,4 @@
 import { Button } from "@/components";
-import { Input } from "@/components/Input";
 import { Card } from "@/components/card";
 import { Header } from "@/components/header";
 import { TextsProvider } from "@/translation";
@@ -152,7 +151,7 @@ export default function Home() {
         </div>
       </section>
       <footer className="mx-6 py-18 md:mx-28 md:py-28">
-        <div className="grid place-items-center gap-6 rounded-xl bg-primary-orange-dark-dark py-18 text-center md:py-20">
+        <div className="bg-primary-orange-dark-dark grid place-items-center gap-6 rounded-xl py-18 text-center md:py-20">
           <div className="grid place-items-center gap-2 md:gap-4">
             <h2 className="max-w-3xl text-3xl font-bold text-gray-100 md:text-4.5xl">
               {texts.THIRD_S_TITLE}

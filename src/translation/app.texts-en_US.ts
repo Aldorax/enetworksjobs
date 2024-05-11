@@ -4,10 +4,12 @@ export const Texts = {
   FIRST_S_SUB:
     "Explore Exciting Opportunities and Grow With Us. Apply Now and Be Part of Something Extraordinary!",
 
-  SECOND_S_TITLE: "Let's delve into what the Enetworks Jobs application offers.",
+  SECOND_S_TITLE:
+    "Let's delve into what the Enetworks Jobs application offers.",
   SECOND_S_SUB: "Used by over 5,000 companies",
 
-  THIRD_S_TITLE: "Apply now and embark on a rewarding journey with Enetworks Jobs!",
+  THIRD_S_TITLE:
+    "Apply now and embark on a rewarding journey with Enetworks Jobs!",
   THIRD_S_SUB:
     "Increase conversions, nurture relationships, and achieve success. Try it now!",
 
@@ -17,8 +19,7 @@ export const Texts = {
   CARD_4_TITLE: "Collaborative Culture",
 
   CARD_1_TEXT: "Join a dynamic team committed to innovation and excellence.",
-  CARD_2_TEXT:
-    "Enjoy rewarding career opportunities and competitive salaries.",
+  CARD_2_TEXT: "Enjoy rewarding career opportunities and competitive salaries.",
   CARD_3_TEXT:
     "Grow your skills and advance your career with our supportive environment.",
   CARD_4_TEXT:
