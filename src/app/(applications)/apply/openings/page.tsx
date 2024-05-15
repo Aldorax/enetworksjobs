@@ -1,5 +1,5 @@
-import { Header } from "@/components";
 import { BentoGridSecondDemo } from "@/components/aceternity/applicationVariations";
+import { Header } from "@/components/header";
 
 export default function Openings() {
   return (

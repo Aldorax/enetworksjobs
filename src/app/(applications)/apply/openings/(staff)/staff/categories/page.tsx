@@ -1,7 +1,7 @@
-import { BentoGridSecondDemo } from "@/components/aceternity/applicationVariations";
+import { StaffCategories } from "@/components/aceternity/staffCategories";
 import Link from "next/link";
 
-export default function StaffCategories() {
+export default function StaffCat() {
   return (
     <div className="max-w-screen grid h-screen max-h-full w-screen grid-cols-1 justify-evenly lg:grid-cols-2">
       {/* Requirments */}
@@ -135,14 +135,14 @@ export default function StaffCategories() {
         </div>
       </div>
       {/* Categories */}
-      <div className="flex h-screen max-w-full flex-col bg-gray-950 p-10 py-18 text-black">
-        <BentoGridSecondDemo />
+      <div className="flex h-screen max-w-full flex-col bg-primary-orange-light p-10 py-18 text-black">
+        <StaffCategories />
         <div className="mt-4 w-full p-4 text-white">
           <h1>
             Do you want to re-apply instead? If so,{" "}
             <Link
               href="/apply/openings/staff/re-apply/categories"
-              className="cursor-pointer font-semibold text-primary-orange-light underline"
+              className="cursor-pointer font-semibold underline"
             >
               Click Here
             </Link>

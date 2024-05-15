@@ -8,7 +8,7 @@ import Image from "next/image";
 
 export function Header() {
   return (
-    <header className="sticky top-0 flex h-18 items-center justify-between gap-10 border-b bg-gray-950 px-4 text-white md:px-6">
+    <header className="sticky top-0 flex h-18 items-center justify-between gap-10 border-b bg-[#fff] px-4 text-[#459dc5] md:px-6">
       <Link href="#" className="flex items-center gap-2 text-lg font-semibold">
         <Image
           src="/images/e-logo.png"
@@ -22,7 +22,7 @@ export function Header() {
       <nav className="md:text-medium hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 lg:gap-6">
         <Link
           href="/apply/openings"
-          className="text-muted-foreground hover:text-foreground rounded-full bg-primary-orange-light p-3"
+          className="hover:text-foreground rounded-full bg-primary-orange-light p-3 text-[#fff]"
         >
           APPLY NOW
         </Link>
@@ -57,15 +57,12 @@ export function Header() {
                 height={100}
                 className="h-10 w-10"
               />
-              <span className="text-sm">Enetworksjobs</span>
+              <span className="text-sm">E-Networks Jobs</span>
             </Link>
-            <Link
-              href="#"
-              className="text-muted-foreground hover:text-foreground"
-            >
+            <Link href="#" className="text-[#fff]">
               Apply
             </Link>
-            <Link href="#" className="hover:text-foreground">
+            <Link href="#" className="text=[#fff]">
               Login
             </Link>
           </nav>

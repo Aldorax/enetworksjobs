@@ -33,7 +33,7 @@ const items = [
     header: <Skeleton />,
     className: "md:col-span-1",
     icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
-    href: "/apply/openings/staff/categories"
+    href: "/apply/openings/staff/categories/staff"
   },
   {
     title: "Referred Field Officer Position",

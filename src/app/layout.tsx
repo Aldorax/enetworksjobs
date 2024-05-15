@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { TextsProvider } from "@/translation";
+import { MainNav } from "./(admin)/dashboard/components/main-nav";
+import { UserNav } from "./(admin)/admin/dashboard/components/user-nav";
 
 const texts = TextsProvider.get();
 
@@ -20,7 +22,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Cloud Boost",
+  title: "E-networks Jobs",
   description: texts.DESCRIPTION,
   openGraph: {
     title: "Cloud Boost",
@@ -38,9 +40,17 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${spaceGrotesk.variable} bg-gray-950 text-gray-100`}
+      className={`${inter.variable} ${spaceGrotesk.variable} bg-[#fff] text-[#459dc5]`}
     >
-      <body>{children}</body>
+      <body>
+        <div className="fixed z-[995] flex h-16 w-full items-center border-b border-black bg-white px-4 text-black">
+          <MainNav className="mx-6" />
+          <div className="ml-auto flex items-center space-x-4">
+            <UserNav />
+          </div>
+        </div>
+        {children}
+      </body>
     </html>
   );
 }

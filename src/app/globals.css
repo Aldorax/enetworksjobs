@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-li{
-    list-style: decimal;
+li {
+  list-style: decimal;
 }

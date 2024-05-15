@@ -5,7 +5,7 @@ export const Texts = {
     "Explore Exciting Opportunities and Grow With Us. Apply Now and Be Part of Something Extraordinary!",
 
   SECOND_S_TITLE:
-    "Let's delve into what the Enetworks Jobs application offers.",
+    "Let's delve into what the E-Networks Jobs application offers.",
   SECOND_S_SUB: "Used by over 5,000 companies",
 
   THIRD_S_TITLE:
