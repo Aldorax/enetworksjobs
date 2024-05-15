@@ -97,7 +97,7 @@ export default function Dashboard() {
               Nominated Field Officer Login
             </h1>
             <p className="text-muted-foreground text-balance">
-              Enter your email below to login to your account
+              Enter your details below to apply
             </p>
           </div>
           <form onSubmit={handleSubmit} className="mt-2 grid p-4 pl-4">
@@ -178,16 +178,18 @@ export default function Dashboard() {
 
             {currentStep === 3 && (
               <div>
-                <ul>
+                <ul className="px-4">
                   {Object.entries(formData).map(([key, value]) => (
-                    <li key={key}>
+                    <li key={key} className="px-2">
                       <strong>{key}: </strong>
                       {value instanceof File ? value.name : value}
                     </li>
                   ))}
                 </ul>
                 {Object.entries(previews).map(([key, src]) => (
-                  <img key={key} src={src} alt={`Preview of ${key}`} />
+                  <section className="my-1">
+                    <img key={key} src={src} alt={`Preview of ${key}`} />
+                  </section>
                 ))}
                 <div className="grid">
                   <Button
