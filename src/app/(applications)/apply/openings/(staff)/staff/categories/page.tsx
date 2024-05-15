@@ -5,20 +5,22 @@ export default function StaffCat() {
   return (
     <div className="max-w-screen grid h-screen max-h-full w-screen grid-cols-1 justify-evenly lg:grid-cols-2">
       {/* Requirments */}
-      <div className="flex max-h-full min-h-screen max-w-full flex-col bg-white p-10 py-18 text-black">
+      <div className="flex h-full max-w-full flex-col bg-white p-3 py-18 text-black md:p-10 lg:min-h-screen">
         <div className="flex flex-col">
           <div className="mt-4">
             <div className="text-xl font-bold underline">
               Requirements for Applying
             </div>
-            <div className="text-medium mt-2 pl-10 font-medium">
+            <div className="text-medium mt-2 pl-4 font-medium lg:pl-10">
               <li>
                 Applicant must be{" "}
-                <span className="text-primary-orange">BE SALES CENTRIC</span>
+                <span className="text-primary-orange-light">
+                  BE SALES CENTRIC
+                </span>
               </li>
               <li>
                 Applicant must be a{" "}
-                <span className="text-primary-orange">
+                <span className="text-primary-orange-light">
                   MARKETING SUPER CHARACTER
                 </span>
               </li>
@@ -35,65 +37,76 @@ export default function StaffCat() {
               <h1 className="text-xl font-bold underline">Remuneration</h1>
             </div>
             <div>
-              <ul className="text-medium my-4 list-none pl-10 font-medium">
+              <ul className="text-medium mt-2 pl-4 font-medium lg:pl-10">
                 <p>
-                  <span className="text-primary-orange">Note:</span> All
+                  <span className="text-primary-orange-light">Note:</span> All
                   employees will be on a 3 months probation period.
                 </p>
                 <p>
-                  <span className="text-primary-orange">Note:</span> All
+                  <span className="text-primary-orange-light">Note:</span> All
                   employees that have succeeded within the 3 months probation
                   period will be confirmed with a possible salary review and
                   access to approved allowances.
                 </p>
               </ul>
             </div>
-            <div className="text-medium mt-2 pl-10">
+            <div className="text-medium mt-2 pl-4 lg:pl-10">
               <li>
-                <span className="text-primary-orange-light">
+                <span className="font-semibold text-primary-orange-light">
                   State Managers and Desk Officers:
                 </span>{" "}
                 ₦1,200,000 Basic/Annum
               </li>
               <li>
-                <span className="text-primary-orange-light">
+                <span className="font-semibold text-primary-orange-light">
                   Dep State Manager and Dep State Desk Officer:
                 </span>{" "}
-                <span className="text-primary-orange">₦840,000</span>Basic/Annum
+                <span className="space-x-5">₦840,000</span>
+                Basic/Annum
               </li>
               <li>
-                <span className="text-primary-orange-light">
+                <span className="font-semibold text-primary-orange-light">
                   Other State Officials:
                 </span>{" "}
-                <span className="text-primary-orange">₦600,000</span>Basic/Annum
+                <span className="space-x-5">₦600,000</span>
+                Basic/Annum
               </li>
               <li>
-                <span className="text-primary-orange-light">
+                <span className="font-semibold text-primary-orange-light">
                   LG Manager/Desk Officer:
                 </span>{" "}
-                <span className="text-primary-orange">₦720,000</span>Basic/Annum
+                <span className="space-x-5">₦720,000</span>
+                Basic/Annum
               </li>
               <li>
-                <span className="text-primary-orange-light">
+                <span className="font-semibold text-primary-orange-light">
                   LG Dep Manager/Dep Desk Officer:
                 </span>{" "}
-                <span className="text-primary-orange">₦480,000</span>Basic/Annum
+                <span className="space-x-5">₦480,000</span>
+                Basic/Annum
               </li>
               <li>
-                <span className="text-primary-orange-light">
+                <span className="font-semibold text-primary-orange-light">
                   Other LG Officials:
                 </span>{" "}
-                <span className="text-primary-orange">₦360,000</span>Basic/Annum
+                <span className="space-x-5">₦360,000</span>
+                Basic/Annum
               </li>
-              <li>
+              <p className="my-2">
+                <span className="font-semibold text-primary-orange-light">
+                  Note:
+                </span>{" "}
                 All positions come with contributory pension plans for
                 post-engagement welfare program upon confirmation after 3 months
                 probation.
-              </li>
-              <li>
+              </p>
+              <p>
+                <span className="font-semibold text-primary-orange-light">
+                  Note:
+                </span>{" "}
                 All positions come with allowances for airtime and data upon
                 confirmation after 3 months probation.
-              </li>
+              </p>
             </div>
           </div>
           <div className="mt-4">
@@ -135,14 +148,14 @@ export default function StaffCat() {
         </div>
       </div>
       {/* Categories */}
-      <div className="flex h-screen max-w-full flex-col bg-primary-orange-light p-10 py-18 text-black">
+      <div className="flex h-full max-w-full flex-col bg-gray-200 p-10 py-18 text-black md:h-screen">
         <StaffCategories />
-        <div className="mt-4 w-full p-4 text-white">
+        <div className="mt-4 w-full p-4 text-black">
           <h1>
             Do you want to re-apply instead? If so,{" "}
             <Link
               href="/apply/openings/staff/re-apply/categories"
-              className="cursor-pointer font-semibold underline"
+              className="cursor-pointer font-semibold text-primary-orange-light underline"
             >
               Click Here
             </Link>

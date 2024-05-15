@@ -8,7 +8,7 @@ import {
 
 export function StaffCategories() {
   return (
-    <BentoGrid className="mx-auto max-w-4xl md:auto-rows-[20rem]">
+    <BentoGrid className="mx-auto w-full md:max-w-4xl md:auto-rows-[20rem]">
       {items.map((item, i) => (
         <BentoGridItem
           key={i}
@@ -31,16 +31,16 @@ const items = [
     title: "State Office Buisness Position",
     description: "Apply to be an official Enetworks staff",
     header: <Skeleton />,
-    className: "md:col-span-1",
+    className: "md:col-span-1 border border-black",
     icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
-    href: "/apply/openings/staff/categories/staff"
+    href: "/apply/openings/staff/categories/test"
   },
   {
     title: "State N.G.O Desk Office Position",
     description:
       "Where you nominated as a field officer for Enetworks? Apply here?",
     header: <Skeleton />,
-    className: "md:col-span-1",
+    className: "md:col-span-1 border border-black",
     icon: <IconFileBroken className="h-4 w-4 text-neutral-500" />,
     href: "/apply/openings/field-officer/application"
   },
@@ -48,7 +48,7 @@ const items = [
     title: "Local Govt. Business Office Positions",
     description: "Apply to be a field officer for Enetworks",
     header: <Skeleton />,
-    className: "md:col-span-1",
+    className: "md:col-span-1 border border-black",
     icon: <IconSignature className="h-4 w-4 text-neutral-500" />,
     href: "/apply/openings/staff/categories"
   },
@@ -56,7 +56,7 @@ const items = [
     title: "Local Govt. N.G.O Desk Office Postions",
     description: "Apply to be a field officer for Enetworks",
     header: <Skeleton />,
-    className: "md:col-span-1",
+    className: "md:col-span-1 border border-black",
     icon: <IconSignature className="h-4 w-4 text-neutral-500" />,
     href: "/apply/openings/staff/categories"
   }

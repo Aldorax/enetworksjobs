@@ -17,7 +17,7 @@ export default function Dashboard() {
           height={100}
           className="mb-5 h-10 w-10"
         />
-        <div className="mx-auto grid w-[450px] gap-6">
+        <div className="mx-auto grid w-full gap-6 p-5 md:w-[450px]">
           <div className="grid gap-2 text-center">
             <h1 className="text-3xl font-bold">
               Nominated Field Officer Signup

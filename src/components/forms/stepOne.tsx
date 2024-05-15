@@ -98,15 +98,15 @@ const MultiStepForm = () => {
   return (
     <div className="max-w-screen grid grid-cols-1 items-center overflow-x-hidden overflow-y-hidden text-black md:grid-cols-2 md:px-10">
       <div className="px-4 py-20 md:p-4">
-        <h2 className="text-xl font-semibold underline">
+        <h2 className="mt-0 text-2xl font-semibold md:mt-20">
           {steps[currentStep - 1].title}
         </h2>
-        <form onSubmit={handleSubmit} className="mt-2 pl-4">
+        <form onSubmit={handleSubmit} className="mt-2 pl-4 text-lg">
           {currentStep === 1 && (
             <>
               {steps[0].fields.map(field => (
-                <div key={field}>
-                  <Label>{field}</Label>
+                <div key={field} className="mb-2">
+                  <Label className="text-lg font-medium">{field}</Label>
                   <Input
                     required
                     type="text"
@@ -125,9 +125,9 @@ const MultiStepForm = () => {
           )}
 
           {currentStep === 2 && (
-            <>
+            <div className="mt-10">
               {steps[1].fields.map(field => (
-                <div key={field} className="mb-4">
+                <div key={field} className="mb-2">
                   <Label>{field}</Label>
                   <Input
                     required
@@ -140,25 +140,25 @@ const MultiStepForm = () => {
                   />
                 </div>
               ))}
-              <SectionCard
+              {/* <SectionCard
                 title="Upload Profile Pic"
                 description="Select a valid Passport photograph to see the preview"
-              >
-                <Input
-                  type="file"
-                  required
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="mt-4"
-                />
-              </SectionCard>
+              > */}
+              <Input
+                type="file"
+                required
+                accept="image/*"
+                onChange={handleImageChange}
+                className="mt-4"
+              />
+              {/* </SectionCard> */}
               {preview != null && (
                 <img className="mt-2" src={preview} alt="Selected" />
               )}
               <Button className="mt-2" type="submit">
                 Next
               </Button>
-            </>
+            </div>
           )}
 
           {currentStep === 3 && (
@@ -218,7 +218,7 @@ const MultiStepForm = () => {
           </Button>
         )}
       </div>
-      <div className="max-h-screen w-[50vw] bg-black md:h-screen"></div>
+      <div className="bg-black md:h-full md:min-h-screen md:w-[50vw]"></div>
     </div>
   );
 };
