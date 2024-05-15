@@ -3,7 +3,6 @@ import { Input } from "@/registry/new-york/ui/input";
 import React, { useState, type ChangeEvent, type FormEvent } from "react";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
-import SectionCard from "../custom/sectionCard";
 
 const MultiStepForm = () => {
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -42,7 +41,7 @@ const MultiStepForm = () => {
       title: "Step 3",
       fields: [
         "State of Origin *",
-        "Local Goverment Area *",
+        "Local Government Area *",
         "Ward *",
         "Gender",
         "What Position are you applying for? *",
@@ -55,6 +54,32 @@ const MultiStepForm = () => {
       fields: [] // No fields, just review
     }
   ];
+
+  const selectOptions = {
+    "State of Origin *": ["Lagos", "Oyo", "Rivers", "Abuja", "Kano"],
+    "Local Government Area *": [
+      "Ikeja",
+      "Ibadan North",
+      "Port Harcourt",
+      "Gwagwalada",
+      "Nassarawa"
+    ],
+    "Ward *": ["Ward 1", "Ward 2", "Ward 3", "Ward 4", "Ward 5"],
+    Gender: ["Male", "Female", "Other"],
+    "What Position are you applying for? *": [
+      "Manager",
+      "Developer",
+      "Designer",
+      "Marketer"
+    ],
+    "What state do you want to work in *": [
+      "Lagos",
+      "Oyo",
+      "Rivers",
+      "Abuja",
+      "Kano"
+    ]
+  };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -83,7 +108,9 @@ const MultiStepForm = () => {
     }
   };
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
@@ -91,132 +118,102 @@ const MultiStepForm = () => {
     const file = event.target.files?.[0];
     if (file != null) {
       setPreview(URL.createObjectURL(file));
-      setFormData({ ...formData, image: file });
+      setFormData({ ...formData, [event.target.name]: file });
     }
   };
 
   return (
     <div className="max-w-screen grid grid-cols-1 items-center overflow-x-hidden overflow-y-hidden text-black md:grid-cols-2 md:px-10">
       <div className="px-4 py-20 md:p-4">
-        <h2 className="mt-0 text-2xl font-semibold md:mt-20">
+        {/* <h2 className="mt-0 text-2xl font-semibold md:mt-20">
           {steps[currentStep - 1].title}
-        </h2>
+        </h2> */}
         <form onSubmit={handleSubmit} className="mt-2 pl-4 text-lg">
-          {currentStep === 1 && (
-            <>
-              {steps[0].fields.map(field => (
-                <div key={field} className="mb-2">
-                  <Label className="text-lg font-medium">{field}</Label>
-                  <Input
-                    required
-                    type="text"
-                    name={field}
-                    onChange={handleChange}
-                    {...(typeof formData[field] === "string" && {
-                      value: formData[field]
-                    })}
-                  />
-                </div>
-              ))}
-              <Button className="mt-2" type="submit">
-                Next
-              </Button>
-            </>
-          )}
-
+          {steps[currentStep - 1].fields.map(field => (
+            <div key={field} className="mb-2">
+              <Label className="text-lg font-medium">{field}</Label>
+              {selectOptions[field] ? (
+                <select
+                  required
+                  name={field}
+                  onChange={handleChange}
+                  value={
+                    typeof formData[field] === "string" ? formData[field] : ""
+                  }
+                  className="rounded border border-gray-300 p-2"
+                >
+                  <option value="">Select an option</option>
+                  {selectOptions[field].map(option => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <Input
+                  required
+                  type="text"
+                  name={field}
+                  onChange={handleChange}
+                  {...(typeof formData[field] === "string" && {
+                    value: formData[field]
+                  })}
+                />
+              )}
+            </div>
+          ))}
           {currentStep === 2 && (
-            <div className="mt-10">
-              {steps[1].fields.map(field => (
-                <div key={field} className="mb-2">
-                  <Label>{field}</Label>
-                  <Input
-                    required
-                    type={field === "password" ? "password" : "text"}
-                    name={field}
-                    onChange={handleChange}
-                    {...(typeof formData[field] === "string" && {
-                      value: formData[field]
-                    })}
-                  />
-                </div>
-              ))}
-              {/* <SectionCard
-                title="Upload Profile Pic"
-                description="Select a valid Passport photograph to see the preview"
-              > */}
+            <>
+              <Label>Upload Profile Pic</Label>
               <Input
                 type="file"
                 required
                 accept="image/*"
+                name="profileImage"
                 onChange={handleImageChange}
                 className="mt-4"
               />
-              {/* </SectionCard> */}
               {preview != null && (
                 <img className="mt-2" src={preview} alt="Selected" />
               )}
-              <Button className="mt-2" type="submit">
-                Next
-              </Button>
-            </div>
-          )}
-
-          {currentStep === 3 && (
-            <>
-              {steps[2].fields.map(field => (
-                <div key={field}>
-                  <Label>{field}</Label>
-                  <Input
-                    required
-                    type={field === "password" ? "password" : "text"}
-                    name={field}
-                    onChange={handleChange}
-                    {...(typeof formData[field] === "string" && {
-                      value: formData[field]
-                    })}
-                  />
-                </div>
-              ))}
-              <Button className="mt-2" type="submit">
-                Next
-              </Button>
             </>
           )}
-
-          {currentStep === 4 && (
-            <div>
-              <ul>
-                {Object.entries(formData).map(([key, value]) => (
-                  <li key={key}>
-                    <strong>{key}: </strong>
-                    {value instanceof File ? value.name : value}
-                  </li>
-                ))}
-              </ul>
-              {preview != null && <img src={preview} alt="Selected" />}
-              <Button
-                type="button"
-                onClick={() => {
-                  handleFinalSubmit().catch(console.error); // Ensure any errors are caught
-                }}
-                className="mt-2"
-              >
-                Confirm and Submit
-              </Button>
-            </div>
-          )}
         </form>
-
-        {currentStep > 1 && currentStep <= steps.length && (
-          <Button
-            onClick={() => {
-              setCurrentStep(currentStep - 1);
-            }}
-            className="mt-4"
-          >
-            Previous
-          </Button>
+        {currentStep === 4 && (
+          <div className="mt-20">
+            <h2 className="text-2xl font-semibold">Review Your Information</h2>
+            <ul className="p-2 px-5">
+              {Object.entries(formData).map(([key, value]) => (
+                <li key={key}>
+                  <strong>{key}: </strong>
+                  {value instanceof File ? value.name : value}
+                </li>
+              ))}
+            </ul>
+            {preview != null && <img src={preview} alt="Selected" />}
+          </div>
         )}
+        <div className="grid">
+          <Button
+            type="button"
+            onClick={() => {
+              handleFinalSubmit().catch(console.error); // Ensure any errors are caught
+            }}
+            className="mt-2"
+          >
+            Confirm and Submit
+          </Button>
+          {currentStep > 1 && (
+            <Button
+              onClick={() => {
+                setCurrentStep(currentStep - 1);
+              }}
+              className="mt-4"
+            >
+              Previous
+            </Button>
+          )}
+        </div>
       </div>
       <div className="bg-black md:h-full md:min-h-screen md:w-[50vw]"></div>
     </div>
