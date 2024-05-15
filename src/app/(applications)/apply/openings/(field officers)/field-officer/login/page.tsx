@@ -10,13 +10,6 @@ export default function Dashboard() {
   return (
     <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2 xl:min-h-screen">
       <div className="flex h-screen flex-col items-center justify-center bg-white py-12 text-black">
-        <Image
-          src="/images/e-logo.png"
-          alt="logo"
-          width={100}
-          height={100}
-          className="mb-5 h-10 w-10"
-        />
         <div className="mx-auto grid w-full gap-6 p-5 md:w-[450px]">
           <div className="grid gap-2 text-center">
             <h1 className="text-3xl font-bold">
