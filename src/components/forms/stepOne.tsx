@@ -1,223 +1,313 @@
 "use client";
-import { Input } from "@/registry/new-york/ui/input";
-import React, { useState, type ChangeEvent, type FormEvent } from "react";
-import { Button } from "../ui/button";
-import { Label } from "../ui/label";
+// components/Input requiredForm.tsx
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { AiOutlineCheck, AiOutlineLoading } from "react-icons/ai";
+import { MdSend } from "react-icons/md";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
 
-const MultiStepForm = () => {
-  const [currentStep, setCurrentStep] = useState<number>(1);
-  const [formData, setFormData] = useState<Record<string, string | File>>({});
-  const [preview, setPreview] = useState<string | null>(null);
+export default function MultiStepForm() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [step, setStep] = useState(1);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors }
+  } = useForm();
 
-  const steps = [
-    {
-      id: 1,
-      title: "Step 1",
-      fields: [
-        "First Name",
-        "Last Name",
-        "Email",
-        "Phone Number",
-        "Enetworkspay Agent Account Email *",
-        "Enetworkspay Card Number *",
-        "Active contact address *"
-      ]
-    },
-    {
-      id: 2,
-      title: "Step 2",
-      fields: [
-        "Guarantor Name *",
-        "Guarantor Phone Number *",
-        "What Language do you speak*",
-        "Next of Kin Name *",
-        "Next of Kin Phone Number *",
-        "Next of Kin Relationship *",
-        "Next of Kin Email *"
-      ]
-    },
-    {
-      id: 3,
-      title: "Step 3",
-      fields: [
-        "State of Origin *",
-        "Local Government Area *",
-        "Ward *",
-        "Gender",
-        "What Position are you applying for? *",
-        "What state do you want to work in *"
-      ]
-    },
-    {
-      id: 4,
-      title: "Review & Submit",
-      fields: [] // No fields, just review
-    }
-  ];
+  // Watch the 'gender' field to handle its state
+  const gender = watch("gender");
+  const state = watch("state");
+  const position = watch("position");
+  const workState = watch("workState");
 
-  const selectOptions = {
-    "State of Origin *": ["Lagos", "Oyo", "Rivers", "Abuja", "Kano"],
-    "Local Government Area *": [
-      "Ikeja",
-      "Ibadan North",
-      "Port Harcourt",
-      "Gwagwalada",
-      "Nassarawa"
-    ],
-    "Ward *": ["Ward 1", "Ward 2", "Ward 3", "Ward 4", "Ward 5"],
-    Gender: ["Male", "Female", "Other"],
-    "What Position are you applying for? *": [
-      "Manager",
-      "Developer",
-      "Designer",
-      "Marketer"
-    ],
-    "What state do you want to work in *": [
-      "Lagos",
-      "Oyo",
-      "Rivers",
-      "Abuja",
-      "Kano"
-    ]
-  };
+  const onSubmit = async (data: Record<string, any>) => {
+    const formData = new FormData();
+    const accessToken = localStorage.getItem("access_token");
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (currentStep < steps.length) {
-      setCurrentStep(currentStep + 1);
-    } else {
-      void handleFinalSubmit(); // Explicitly marking the promise as ignored
-    }
-  };
+    setLoading(true);
 
-  const handleFinalSubmit = async () => {
-    const formDataToSend = new FormData();
-    for (const key in formData) {
-      formDataToSend.append(key, formData[key]);
-    }
+    Object.entries(data).forEach(([key, value]) => {
+      if (
+        key === "guarantor_passport" ||
+        key === "profile_image" ||
+        key === "signature" ||
+        key === "passport_photo"
+      ) {
+        if (value && value[0] instanceof File) {
+          formData.append(key, value[0]);
+        }
+      } else {
+        formData.append(key, value);
+      }
+    });
 
     try {
       const response = await fetch("http://localhost:5000/api/submit", {
         method: "POST",
-        body: formDataToSend
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
       });
-      const result = await response.json();
-      console.log("Form Submitted:", result);
+
+      if (!accessToken) {
+        setLoading(false);
+        return;
+      }
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        setLoading(false);
+        throw new Error(errorData.message);
+      }
+
+      setSuccess(true);
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error(error);
+      setLoading(false);
     }
   };
 
-  const handleChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    setFormData({ ...formData, [event.target.name]: event.target.value });
-  };
+  const nextStep = () => setStep(prev => prev + 1);
+  const prevStep = () => setStep(prev => prev - 1);
 
-  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file != null) {
-      setPreview(URL.createObjectURL(file));
-      setFormData({ ...formData, [event.target.name]: file });
-    }
+  const renderImagePreview = (field: string) => {
+    const file = watch(field)?.[0];
+    return file ? (
+      <img
+        src={URL.createObjectURL(file)}
+        alt={`${field} preview`}
+        className="mt-2 h-20 w-20 object-cover"
+      />
+    ) : null;
   };
 
   return (
-    <div className="max-w-screen grid grid-cols-1 items-center overflow-x-hidden overflow-y-hidden text-black md:grid-cols-2 md:px-10">
-      <div className="px-4 py-20 md:p-4">
-        {/* <h2 className="mt-0 text-2xl font-semibold md:mt-20">
-          {steps[currentStep - 1].title}
-        </h2> */}
-        <form onSubmit={handleSubmit} className="mt-2 pl-4 text-lg">
-          {steps[currentStep - 1].fields.map(field => (
-            <div key={field} className="mb-2">
-              <Label className="text-lg font-medium">{field}</Label>
-              {selectOptions[field] ? (
-                <select
-                  required
-                  name={field}
-                  onChange={handleChange}
-                  value={
-                    typeof formData[field] === "string" ? formData[field] : ""
-                  }
-                  className="rounded border border-gray-300 p-2"
-                >
-                  <option value="">Select an option</option>
-                  {selectOptions[field].map(option => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <Input
-                  required
-                  type="text"
-                  name={field}
-                  onChange={handleChange}
-                  {...(typeof formData[field] === "string" && {
-                    value: formData[field]
-                  })}
-                />
-              )}
+    <div className="grid h-full grid-cols-1 md:grid-cols-2">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex h-full min-h-screen w-full flex-col justify-center space-y-2 rounded-md bg-white p-6 pt-20 text-black"
+      >
+        {step === 1 && (
+          <>
+            <div>
+              <Label>Full Name</Label>
+              <Input required placeholder="John Doe" {...register("name")} />
             </div>
-          ))}
-          {currentStep === 2 && (
-            <>
-              <Label>Upload Profile Pic</Label>
+            <div>
+              <Label>Phone Number</Label>
+              <Input required {...register("phone_number")} />
+            </div>
+            <div>
+              <Label>Enetworkspay Agent Email Address</Label>
               <Input
-                type="file"
                 required
-                accept="image/*"
-                name="profileImage"
-                onChange={handleImageChange}
-                className="mt-4"
+                type="email"
+                placeholder="john.doe@example.com"
+                {...register("agent_email")}
               />
-              {preview != null && (
-                <img className="mt-2" src={preview} alt="Selected" />
-              )}
-            </>
-          )}
-        </form>
-        {currentStep === 4 && (
-          <div className="mt-20">
-            <h2 className="text-2xl font-semibold">Review Your Information</h2>
-            <ul className="p-2 px-5">
-              {Object.entries(formData).map(([key, value]) => (
-                <li key={key}>
-                  <strong>{key}: </strong>
-                  {value instanceof File ? value.name : value}
-                </li>
-              ))}
-            </ul>
-            {preview != null && <img src={preview} alt="Selected" />}
-          </div>
+            </div>
+            <div>
+              <Label>Enetworkspay Agent Cash Card Number</Label>
+              <Input
+                required
+                type="email"
+                placeholder="john.doe@example.com"
+                {...register("agent_email")}
+              />
+            </div>
+            <div>
+              <Label>Active Contact Address</Label>
+              <Input
+                required
+                type="text"
+                placeholder="123 Main St"
+                {...register("address")}
+              />
+            </div>
+            <div className="grid">
+              <Button color="primary" onClick={nextStep}>
+                Next
+              </Button>
+            </div>
+          </>
         )}
-        <div className="grid">
-          <Button
-            type="button"
-            onClick={() => {
-              handleFinalSubmit().catch(console.error); // Ensure any errors are caught
-            }}
-            className="mt-2"
-          >
-            Confirm and Submit
-          </Button>
-          {currentStep > 1 && (
-            <Button
-              onClick={() => {
-                setCurrentStep(currentStep - 1);
-              }}
-              className="mt-4"
-            >
-              Previous
-            </Button>
-          )}
-        </div>
-      </div>
-      <div className="bg-black md:h-full md:min-h-screen md:w-[50vw]"></div>
+        {step === 2 && (
+          <>
+            <div>
+              <Label>State Of Origin</Label>
+              {/* <Input required {...register("state")} /> */}
+              <Select
+                onValueChange={value => setValue("state", value)}
+                value={state || ""}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select your state" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="male">Anambra</SelectItem>
+                  <SelectItem value="female">Lagos</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label>Local Goverment Area</Label>
+              <Input required {...register("lga")} />
+            </div>
+            <div>
+              <Label>Ward</Label>
+              <Input required {...register("ward")} />
+            </div>
+            <div>
+              <Label>Gender</Label>
+              <Select
+                onValueChange={value => setValue("gender", value)}
+                value={gender || ""}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select your gender" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="male">Male</SelectItem>
+                  <SelectItem value="female">Female</SelectItem>
+                </SelectContent>
+              </Select>
+              {/* <p className="text-red-500">{String(errors.gender?.message)}</p> */}
+            </div>
+            <div>
+              <section className="grid gap-2">
+                <Button color="primary" onClick={prevStep}>
+                  Previous
+                </Button>
+                <Button color="primary" onClick={nextStep}>
+                  Next
+                </Button>
+              </section>
+            </div>
+          </>
+        )}
+        {step === 3 && (
+          <>
+            <div>
+              <Label>Next of Kin Name</Label>
+              <Input required {...register("guarantor_name")} />
+            </div>
+            <div>
+              <Label>Next of Kin Phone Number</Label>
+              <Input required {...register("guarantor_phone_number")} />
+            </div>
+            <div>
+              <Label>Next of Kin Relationship</Label>
+              <Input required {...register("guarantor_bvn")} />
+            </div>
+            <div>
+              <Label>Next of Kin Email Address</Label>
+              <Input required {...register("guarantor_nin")} />
+            </div>
+            <div>
+              <Label>Guarantor Name</Label>
+              <Input required {...register("guarantor_nin")} />
+            </div>
+            <div>
+              <Label>Guarantor Phone Number</Label>
+              <Input required {...register("guarantor_nin")} />
+            </div>
+            <div>
+              <section className="grid gap-2">
+                <Button color="primary" onClick={prevStep}>
+                  Previous
+                </Button>
+                <Button color="primary" onClick={nextStep}>
+                  Next
+                </Button>
+              </section>
+            </div>
+          </>
+        )}
+        {step === 4 && (
+          <>
+            <div>
+              <Label>What language do you speak?</Label>
+              <Input required {...register("guarantor_address")} />
+            </div>
+            <div>
+              <Label>What Position are you applying for?</Label>
+              {/* <Input required type="date" {...register("date_of_birth")} /> */}
+              <Select
+                onValueChange={value => setValue("position", value)}
+                value={position || ""}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Choose a position" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="male">Male</SelectItem>
+                  <SelectItem value="female">Female</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label>What state do you want to work in?</Label>
+              <Select
+                onValueChange={value => setValue("workState", value)}
+                value={workState || ""}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a work state" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="male">Male</SelectItem>
+                  <SelectItem value="female">Female</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label>Passport Photo</Label>
+              <Input
+                required
+                type="file"
+                accept="image/*"
+                {...register("passport_photo")}
+              />
+              {renderImagePreview("passport_photo")}
+            </div>
+            <div className="flex justify-between">
+              <Button color="primary" onClick={prevStep}>
+                Previous
+              </Button>
+              <Button color="primary" type="submit" disabled={loading}>
+                {loading ? (
+                  <AiOutlineLoading className="animate-spin" />
+                ) : success ? (
+                  <AiOutlineCheck size={20} color="#00cc00" />
+                ) : (
+                  <>
+                    Submit Form <MdSend size={20} />
+                  </>
+                )}
+              </Button>
+            </div>
+          </>
+        )}
+      </form>
+      <div className="bg-black md:h-full md:min-h-screen"></div>
     </div>
   );
-};
-
-export default MultiStepForm;
+}

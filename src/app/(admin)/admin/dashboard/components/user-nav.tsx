@@ -72,7 +72,7 @@ export function UserNav() {
         Apply
       </Link>
 
-      <Link href="/docs" className="rounded-md bg-primary-orange-light p-2">
+      <Link href="/login" className="rounded-md bg-primary-orange-light p-2">
         Log In
       </Link>
     </div>

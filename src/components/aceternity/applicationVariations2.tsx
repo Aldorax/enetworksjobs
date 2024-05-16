@@ -1,12 +1,12 @@
 import React from "react";
-import { BentoGrid, BentoGridItem } from "@/components/aceternity/bentoGrids";
+import { BentoGrid, BentoGridItem } from "@/components/aceternity/bentoGrids2";
 import {
   IconClipboardCopy,
   IconFileBroken,
   IconSignature
 } from "@tabler/icons-react";
 
-export function BentoGridSecondDemo() {
+export function BentoGridSecondDemo2() {
   return (
     <BentoGrid className="mx-auto w-full rounded-lg bg-white p-5 md:max-w-4xl md:auto-rows-[20rem]">
       {items.map((item, i) => (
@@ -29,7 +29,7 @@ const Skeleton = () => (
 const items = [
   {
     title: "Enetworks Staff",
-    description: "Apply to be an official Enetworks staff",
+    description: "Login to your official Enetworks staff back office",
     header: <Skeleton />,
     className: "md:col-span-1 border border-black",
     icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
@@ -37,8 +37,7 @@ const items = [
   },
   {
     title: "Referred Field Officer Position",
-    description:
-      "Where you nominated as a field officer for Enetworks? Apply here?",
+    description: "Login to your official referred field officer back office",
     header: <Skeleton />,
     className: "md:col-span-1 border border-black",
     icon: <IconFileBroken className="h-4 w-4 text-neutral-500" />,
@@ -46,7 +45,7 @@ const items = [
   },
   {
     title: "Field Officer Position",
-    description: "Apply to be a field officer for Enetworks",
+    description: "Login to your official field officer back office",
     header: <Skeleton />,
     className: "md:col-span-2 border border-black",
     icon: <IconSignature className="h-4 w-4 text-neutral-500" />,

@@ -118,6 +118,15 @@ export default function FieldApplication() {
               />
             </div>
             <div>
+              <Label>Email of who nominated you</Label>
+              <Input
+                required
+                type="email"
+                placeholder="nominee@example.com"
+                {...register("nominee_email")}
+              />
+            </div>
+            <div>
               <Label>Password</Label>
               <Input
                 required

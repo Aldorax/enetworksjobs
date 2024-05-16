@@ -1,4 +1,5 @@
 import { BentoGridSecondDemo } from "@/components/aceternity/applicationVariations";
+import { StaffCategories2 } from "@/components/aceternity/staffCategories2";
 
 export default function StaffReapplyCategories() {
   return (
@@ -44,8 +45,8 @@ export default function StaffReapplyCategories() {
         </div>
       </div>
       {/* Categories */}
-      <div className="flex h-screen max-w-full flex-col bg-gray-950 p-10 py-18 text-black">
-        <BentoGridSecondDemo />
+      <div className="flex h-screen max-w-full flex-col bg-gray-200 p-10 py-18 text-black">
+        <StaffCategories2 />
         <div className="mt-4 w-full p-4 text-white"></div>
       </div>
     </div>

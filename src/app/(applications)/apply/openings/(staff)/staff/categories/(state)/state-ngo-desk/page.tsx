@@ -18,7 +18,7 @@ import {
   SelectValue
 } from "@/components/ui/select";
 
-export default function FieldApplication() {
+export default function StateNgoDesk() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -33,6 +33,9 @@ export default function FieldApplication() {
 
   // Watch the 'gender' field to handle its state
   const gender = watch("gender");
+  const state = watch("state");
+  const position = watch("position");
+  const workState = watch("workState");
 
   const onSubmit = async (data: Record<string, any>) => {
     const formData = new FormData();
@@ -105,8 +108,12 @@ export default function FieldApplication() {
         {step === 1 && (
           <>
             <div>
-              <Label>Name</Label>
+              <Label>Full Name</Label>
               <Input required placeholder="John Doe" {...register("name")} />
+            </div>
+            <div>
+              <Label>Phone Number</Label>
+              <Input required {...register("phone_number")} />
             </div>
             <div>
               <Label>Enetworkspay Agent Email Address</Label>
@@ -118,16 +125,16 @@ export default function FieldApplication() {
               />
             </div>
             <div>
-              <Label>Password</Label>
+              <Label>Enetworkspay Agent Cash Card Number</Label>
               <Input
                 required
-                type="password"
-                placeholder="Your password"
-                {...register("password")}
+                type="email"
+                placeholder="john.doe@example.com"
+                {...register("agent_email")}
               />
             </div>
             <div>
-              <Label>Address</Label>
+              <Label>Active Contact Address</Label>
               <Input
                 required
                 type="text"
@@ -145,16 +152,28 @@ export default function FieldApplication() {
         {step === 2 && (
           <>
             <div>
-              <Label>BVN</Label>
-              <Input required {...register("bvn")} />
+              <Label>State Of Origin</Label>
+              {/* <Input required {...register("state")} /> */}
+              <Select
+                onValueChange={value => setValue("state", value)}
+                value={state || ""}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select your state" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="male">Anambra</SelectItem>
+                  <SelectItem value="female">Lagos</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <div>
-              <Label>NIN</Label>
-              <Input required {...register("nin")} />
+              <Label>Local Goverment Area</Label>
+              <Input required {...register("lga")} />
             </div>
             <div>
-              <Label>Enetworkspay Agent Card Number</Label>
-              <Input required {...register("agent_card_number")} />
+              <Label>Ward</Label>
+              <Input required {...register("ward")} />
             </div>
             <div>
               <Label>Gender</Label>
@@ -187,19 +206,27 @@ export default function FieldApplication() {
         {step === 3 && (
           <>
             <div>
-              <Label>Guarantor Name</Label>
+              <Label>Next of Kin Name</Label>
               <Input required {...register("guarantor_name")} />
             </div>
             <div>
-              <Label>Guarantor Phone Number</Label>
+              <Label>Next of Kin Phone Number</Label>
               <Input required {...register("guarantor_phone_number")} />
             </div>
             <div>
-              <Label>Guarantor BVN</Label>
+              <Label>Next of Kin Relationship</Label>
               <Input required {...register("guarantor_bvn")} />
             </div>
             <div>
-              <Label>Guarantor NIN</Label>
+              <Label>Next of Kin Email Address</Label>
+              <Input required {...register("guarantor_nin")} />
+            </div>
+            <div>
+              <Label>Guarantor Name</Label>
+              <Input required {...register("guarantor_nin")} />
+            </div>
+            <div>
+              <Label>Guarantor Phone Number</Label>
               <Input required {...register("guarantor_nin")} />
             </div>
             <div>
@@ -217,46 +244,39 @@ export default function FieldApplication() {
         {step === 4 && (
           <>
             <div>
-              <Label>Guarantor Address</Label>
+              <Label>What language do you speak?</Label>
               <Input required {...register("guarantor_address")} />
             </div>
             <div>
-              <Label>Date of Birth</Label>
-              <Input required type="date" {...register("date_of_birth")} />
+              <Label>What Position are you applying for?</Label>
+              {/* <Input required type="date" {...register("date_of_birth")} /> */}
+              <Select
+                onValueChange={value => setValue("position", value)}
+                value={position || ""}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Choose a position" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="male">Male</SelectItem>
+                  <SelectItem value="female">Female</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <div>
-              <Label>Phone Number</Label>
-              <Input required {...register("phone_number")} />
-            </div>
-            <div>
-              <Label>Guarantor Passport</Label>
-              <Input
-                required
-                type="file"
-                accept="image/*"
-                {...register("guarantor_passport")}
-              />
-              {renderImagePreview("guarantor_passport")}
-            </div>
-            <div>
-              <Label>Profile Image</Label>
-              <Input
-                required
-                type="file"
-                accept="image/*"
-                {...register("profile_image")}
-              />
-              {renderImagePreview("profile_image")}
-            </div>
-            <div>
-              <Label>Signature</Label>
-              <Input
-                required
-                type="file"
-                accept="image/*"
-                {...register("signature")}
-              />
-              {renderImagePreview("signature")}
+              <Label>What state do you want to work in?</Label>
+              <Select
+                onValueChange={value => setValue("workState", value)}
+                value={workState || ""}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a work state" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="male">Male</SelectItem>
+                  <SelectItem value="female">Female</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <div>
               <Label>Passport Photo</Label>
