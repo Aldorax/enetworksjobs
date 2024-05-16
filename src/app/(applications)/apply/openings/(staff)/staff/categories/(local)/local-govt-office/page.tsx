@@ -114,13 +114,16 @@ export default function LocalGovtOffice() {
     });
 
     try {
-      const response = await fetch("http://localhost:8000/create_account", {
-        method: "POST",
-        body: formData,
-        headers: {
-          Authorization: `Bearer ${accessToken}`
+      const response = await fetch(
+        "https://enetworks-tovimikailu.koyeb.app/create_account",
+        {
+          method: "POST",
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
         }
-      });
+      );
 
       if (!accessToken) {
         setLoading(false);
@@ -134,6 +137,7 @@ export default function LocalGovtOffice() {
       }
 
       setSuccess(true);
+      window.location.href = "/success";
     } catch (error) {
       console.error(error);
       setLoading(false);
