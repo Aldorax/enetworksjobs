@@ -31,11 +31,66 @@ export default function StateGovtOffice() {
     formState: { errors }
   } = useForm();
 
+  const valid_genders = ["male", "female"];
+  const valid_positions = [
+    "State Managers",
+    "State Asst Manager",
+    "State Admin Sec",
+    "State Operations Manager",
+    "State Media and Public Relations Officer",
+    "State Legal Asst",
+    "State Finance Officer",
+    "State Tech Officer",
+    "State Community Relations Officer",
+    "State Product Dev Officer",
+    "State Business Development Officer",
+    "State Personnel Manager"
+  ];
+  const valid_locations = [
+    "abia",
+    "adamawa",
+    "akwa ibom",
+    "anambra",
+    "bauchi",
+    "bayelsa",
+    "benue",
+    "borno",
+    "cross river",
+    "delta",
+    "ebonyi",
+    "edo",
+    "ekiti",
+    "enugu",
+    "fct",
+    "gombe",
+    "imo",
+    "jigawa",
+    "kaduna",
+    "kano",
+    "katsina",
+    "kebbi",
+    "kogi",
+    "kwara",
+    "lagos",
+    "nasarawa",
+    "niger",
+    "ogun",
+    "ondo",
+    "osun",
+    "oyo",
+    "plateau",
+    "rivers",
+    "sokoto",
+    "taraba",
+    "yobe",
+    "zamfara"
+  ];
+
   // Watch the 'gender' field to handle its state
   const gender = watch("gender");
-  const state = watch("state");
-  const position = watch("position");
-  const workState = watch("workState");
+  const state = watch("state_of_origin");
+  const position = watch("preferred_position");
+  const workState = watch("preferred_location");
 
   const onSubmit = async (data: Record<string, any>) => {
     const formData = new FormData();
@@ -46,7 +101,7 @@ export default function StateGovtOffice() {
     Object.entries(data).forEach(([key, value]) => {
       if (
         key === "guarantor_passport" ||
-        key === "profile_image" ||
+        key === "image" ||
         key === "signature" ||
         key === "passport_photo"
       ) {
@@ -59,7 +114,7 @@ export default function StateGovtOffice() {
     });
 
     try {
-      const response = await fetch("http://localhost:5000/api/submit", {
+      const response = await fetch("http://localhost:8000/create_account", {
         method: "POST",
         body: formData,
         headers: {
@@ -109,7 +164,11 @@ export default function StateGovtOffice() {
           <>
             <div>
               <Label>Full Name</Label>
-              <Input required placeholder="John Doe" {...register("name")} />
+              <Input
+                required
+                placeholder="John Doe"
+                {...register("full_name")}
+              />
             </div>
             <div>
               <Label>Phone Number</Label>
@@ -130,7 +189,7 @@ export default function StateGovtOffice() {
                 required
                 type="email"
                 placeholder="john.doe@example.com"
-                {...register("agent_email")}
+                {...register("agent_card_number")}
               />
             </div>
             <div>
@@ -139,7 +198,7 @@ export default function StateGovtOffice() {
                 required
                 type="text"
                 placeholder="123 Main St"
-                {...register("address")}
+                {...register("active_contact_address")}
               />
             </div>
             <div className="grid">
@@ -155,15 +214,18 @@ export default function StateGovtOffice() {
               <Label>State Of Origin</Label>
               {/* <Input required {...register("state")} /> */}
               <Select
-                onValueChange={value => setValue("state", value)}
+                onValueChange={value => setValue("state_of_origin", value)}
                 value={state || ""}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select your state" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="male">Anambra</SelectItem>
-                  <SelectItem value="female">Lagos</SelectItem>
+                  {valid_locations.map(item => (
+                    <SelectItem key={item} value={item}>
+                      {item.charAt(0).toUpperCase() + item.slice(1)}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -185,10 +247,14 @@ export default function StateGovtOffice() {
                   <SelectValue placeholder="Select your gender" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="male">Male</SelectItem>
-                  <SelectItem value="female">Female</SelectItem>
+                  {valid_genders.map(item => (
+                    <SelectItem key={item} value={item}>
+                      {item.charAt(0).toUpperCase() + item.slice(1)}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
+
               {/* <p className="text-red-500">{String(errors.gender?.message)}</p> */}
             </div>
             <div>
@@ -207,27 +273,27 @@ export default function StateGovtOffice() {
           <>
             <div>
               <Label>Next of Kin Name</Label>
-              <Input required {...register("guarantor_name")} />
+              <Input required {...register("next_of_kin_name")} />
             </div>
             <div>
               <Label>Next of Kin Phone Number</Label>
-              <Input required {...register("guarantor_phone_number")} />
+              <Input required {...register("next_of_kin_phone_number")} />
             </div>
             <div>
               <Label>Next of Kin Relationship</Label>
-              <Input required {...register("guarantor_bvn")} />
+              <Input required {...register("next_of_kin_relationship")} />
             </div>
             <div>
               <Label>Next of Kin Email Address</Label>
-              <Input required {...register("guarantor_nin")} />
+              <Input required {...register("next_of_kin_email_address")} />
             </div>
             <div>
               <Label>Guarantor Name</Label>
-              <Input required {...register("guarantor_nin")} />
+              <Input required {...register("guarantor_name")} />
             </div>
             <div>
               <Label>Guarantor Phone Number</Label>
-              <Input required {...register("guarantor_nin")} />
+              <Input required {...register("guarantor_phone_number")} />
             </div>
             <div>
               <section className="grid gap-2">
@@ -245,36 +311,42 @@ export default function StateGovtOffice() {
           <>
             <div>
               <Label>What language do you speak?</Label>
-              <Input required {...register("guarantor_address")} />
+              <Input required {...register("languages")} />
             </div>
             <div>
               <Label>What Position are you applying for?</Label>
               {/* <Input required type="date" {...register("date_of_birth")} /> */}
               <Select
-                onValueChange={value => setValue("position", value)}
+                onValueChange={value => setValue("preferred_position", value)}
                 value={position || ""}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Choose a position" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="male">Male</SelectItem>
-                  <SelectItem value="female">Female</SelectItem>
+                  {valid_positions.map(item => (
+                    <SelectItem key={item} value={item}>
+                      {item.charAt(0).toUpperCase() + item.slice(1)}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
             <div>
               <Label>What state do you want to work in?</Label>
               <Select
-                onValueChange={value => setValue("workState", value)}
+                onValueChange={value => setValue("preferred_location", value)}
                 value={workState || ""}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select a work state" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="male">Male</SelectItem>
-                  <SelectItem value="female">Female</SelectItem>
+                  {valid_locations.map(item => (
+                    <SelectItem key={item} value={item}>
+                      {item.charAt(0).toUpperCase() + item.slice(1)}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -284,9 +356,9 @@ export default function StateGovtOffice() {
                 required
                 type="file"
                 accept="image/*"
-                {...register("passport_photo")}
+                {...register("image")}
               />
-              {renderImagePreview("passport_photo")}
+              {renderImagePreview("image")}
             </div>
             <div className="flex justify-between">
               <Button color="primary" onClick={prevStep}>
