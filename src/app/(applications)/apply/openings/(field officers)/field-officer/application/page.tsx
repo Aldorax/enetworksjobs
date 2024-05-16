@@ -1,230 +1,302 @@
 "use client";
-import { Input } from "@/registry/new-york/ui/input";
-import React, { useState, type ChangeEvent, type FormEvent } from "react";
+// components/Input requiredForm.tsx
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { AiOutlineCheck, AiOutlineLoading } from "react-icons/ai";
+import { MdSend } from "react-icons/md";
 import { Label } from "@/components/ui/label";
-import SectionCard from "@/components/custom/sectionCard";
-import Link from "next/link";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
 
-export default function Dashboard() {
-  const [currentStep, setCurrentStep] = useState<number>(1);
-  const [formData, setFormData] = useState<Record<string, string | File>>({});
-  const [previews, setPreviews] = useState<Record<string, string | null>>({});
+export default function FieldApplication() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [step, setStep] = useState(1);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors }
+  } = useForm();
 
-  const imageFields = [
-    "Guarantor Passport Photo *",
-    "Profile Image *",
-    "Signature*",
-    "Your Passport Photo *"
-  ];
+  // Watch the 'gender' field to handle its state
+  const gender = watch("gender");
 
-  const steps = [
-    {
-      id: 1,
-      title: "Step 1",
-      fields: ["Name", "Address", "BVN", "NIN", "Gender", "Phone Number"]
-    },
-    {
-      id: 2,
-      title: "Step 2",
-      fields: [
-        "Guarantor Name",
-        "Guarantor Phone Number",
-        "Guarantor BVN",
-        "Guarantor NIN",
-        "Guarantor Address",
-        "Guarantor Passport Photo *",
-        "Profile Image *",
-        "Signature*",
-        "Your Passport Photo *"
-      ]
-    },
-    {
-      id: 4,
-      title: "Review & Submit",
-      fields: [] // No fields, just review
-    }
-  ];
+  const onSubmit = async (data: Record<string, any>) => {
+    const formData = new FormData();
+    const accessToken = localStorage.getItem("access_token");
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (currentStep < steps.length) {
-      setCurrentStep(currentStep + 1);
-    } else {
-      void handleFinalSubmit(); // Explicitly marking the promise as ignored
-    }
-  };
+    setLoading(true);
 
-  const handleFinalSubmit = async () => {
-    const formDataToSend = new FormData();
-    for (const key in formData) {
-      formDataToSend.append(key, formData[key]);
-    }
+    Object.entries(data).forEach(([key, value]) => {
+      if (
+        key === "guarantor_passport" ||
+        key === "profile_image" ||
+        key === "signature" ||
+        key === "passport_photo"
+      ) {
+        if (value && value[0] instanceof File) {
+          formData.append(key, value[0]);
+        }
+      } else {
+        formData.append(key, value);
+      }
+    });
 
     try {
       const response = await fetch("http://localhost:5000/api/submit", {
         method: "POST",
-        body: formDataToSend
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
       });
-      const result = await response.json();
-      console.log("Form Submitted:", result);
+
+      if (!accessToken) {
+        setLoading(false);
+        return;
+      }
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        setLoading(false);
+        throw new Error(errorData.message);
+      }
+
+      setSuccess(true);
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error(error);
+      setLoading(false);
     }
   };
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [event.target.name]: event.target.value });
-  };
+  const nextStep = () => setStep(prev => prev + 1);
+  const prevStep = () => setStep(prev => prev - 1);
 
-  const handleImageChange = (
-    event: ChangeEvent<HTMLInputElement>,
-    field: string
-  ) => {
-    const file = event.target.files?.[0];
-    if (file != null) {
-      setPreviews({ ...previews, [field]: URL.createObjectURL(file) });
-      setFormData({ ...formData, [field]: file });
-    }
+  const renderImagePreview = (field: string) => {
+    const file = watch(field)?.[0];
+    return file ? (
+      <img
+        src={URL.createObjectURL(file)}
+        alt={`${field} preview`}
+        className="mt-2 h-20 w-20 object-cover"
+      />
+    ) : null;
   };
 
   return (
-    <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2 xl:min-h-screen">
-      <div className="flex h-full min-h-screen flex-col items-center justify-center bg-white py-12 text-black">
-        <div className="mx-auto grid w-full gap-6 md:w-[850px]">
-          <div className="mt-20 grid gap-2 text-center">
-            <h1 className="text-3xl font-bold">
-              Nominated Field Officer Login
-            </h1>
-            <p className="text-muted-foreground text-balance">
-              Enter your details below to apply
-            </p>
-          </div>
-          <form onSubmit={handleSubmit} className="mt-2 grid p-4 pl-4">
-            {currentStep === 1 && (
-              <>
-                {steps[0].fields.map(field => (
-                  <div key={field} className="mb-2">
-                    <Label>{field}</Label>
-                    <Input
-                      required
-                      type="text"
-                      name={field}
-                      onChange={handleChange}
-                      value={
-                        typeof formData[field] === "string"
-                          ? formData[field]
-                          : ""
-                      }
-                    />
-                  </div>
-                ))}
-                <Button className="mt-2" type="submit">
+    <div className="grid h-full grid-cols-1 md:grid-cols-2">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex h-full min-h-screen w-full flex-col justify-center space-y-2 rounded-md bg-white p-6 pt-20 text-black"
+      >
+        {step === 1 && (
+          <>
+            <div>
+              <Label>Name</Label>
+              <Input required placeholder="John Doe" {...register("name")} />
+            </div>
+            <div>
+              <Label>Enetworkspay Agent Email Address</Label>
+              <Input
+                required
+                type="email"
+                placeholder="john.doe@example.com"
+                {...register("agent_email")}
+              />
+            </div>
+            <div>
+              <Label>Email of who nominated you</Label>
+              <Input
+                required
+                type="email"
+                placeholder="nominee@example.com"
+                {...register("nominee_email")}
+              />
+            </div>
+            <div>
+              <Label>Password</Label>
+              <Input
+                required
+                type="password"
+                placeholder="Your password"
+                {...register("password")}
+              />
+            </div>
+            <div>
+              <Label>Address</Label>
+              <Input
+                required
+                type="text"
+                placeholder="123 Main St"
+                {...register("address")}
+              />
+            </div>
+            <div className="grid">
+              <Button color="primary" onClick={nextStep}>
+                Next
+              </Button>
+            </div>
+          </>
+        )}
+        {step === 2 && (
+          <>
+            <div>
+              <Label>BVN</Label>
+              <Input required {...register("bvn")} />
+            </div>
+            <div>
+              <Label>NIN</Label>
+              <Input required {...register("nin")} />
+            </div>
+            <div>
+              <Label>Enetworkspay Agent Card Number</Label>
+              <Input required {...register("agent_card_number")} />
+            </div>
+            <div>
+              <Label>Gender</Label>
+              <Select
+                onValueChange={value => setValue("gender", value)}
+                value={gender || ""}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select your gender" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="male">Male</SelectItem>
+                  <SelectItem value="female">Female</SelectItem>
+                </SelectContent>
+              </Select>
+              {/* <p className="text-red-500">{String(errors.gender?.message)}</p> */}
+            </div>
+            <div>
+              <section className="grid gap-2">
+                <Button color="primary" onClick={prevStep}>
+                  Previous
+                </Button>
+                <Button color="primary" onClick={nextStep}>
                   Next
                 </Button>
-              </>
-            )}
-
-            {currentStep === 2 && (
-              <div className="mt-10">
-                {steps[1].fields.map(field => (
-                  <div key={field} className="mb-2">
-                    <Label>{field}</Label>
-                    {imageFields.includes(field) ? (
-                      <Input
-                        required
-                        type="file"
-                        accept="image/*"
-                        name={field}
-                        onChange={e => handleImageChange(e, field)}
-                      />
-                    ) : (
-                      <Input
-                        required
-                        type="text"
-                        name={field}
-                        onChange={handleChange}
-                        value={
-                          typeof formData[field] === "string"
-                            ? formData[field]
-                            : ""
-                        }
-                      />
-                    )}
-                    {previews[field] && (
-                      <img
-                        className="mt-2"
-                        src={previews[field]}
-                        alt={`Preview of ${field}`}
-                      />
-                    )}
-                  </div>
-                ))}
-                <section className="grid">
-                  <Button className="mt-2" type="submit">
-                    Next
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      setCurrentStep(currentStep - 1);
-                    }}
-                    className="mt-4"
-                  >
-                    Previous
-                  </Button>
-                </section>
-              </div>
-            )}
-
-            {currentStep === 3 && (
-              <div>
-                <ul className="px-4">
-                  {Object.entries(formData).map(([key, value]) => (
-                    <li key={key} className="px-2">
-                      <strong>{key}: </strong>
-                      {value instanceof File ? value.name : value}
-                    </li>
-                  ))}
-                </ul>
-                {Object.entries(previews).map(([key, src]) => (
-                  <section className="my-1">
-                    <img key={key} src={src} alt={`Preview of ${key}`} />
-                  </section>
-                ))}
-                <div className="grid">
-                  <Button
-                    onClick={() => {
-                      setCurrentStep(currentStep - 1);
-                    }}
-                    className="mt-4"
-                  >
-                    Previous
-                  </Button>
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      handleFinalSubmit().catch(console.error); // Ensure any errors are caught
-                    }}
-                    className="mt-2"
-                  >
-                    Confirm and Submit
-                  </Button>
-                </div>
-              </div>
-            )}
-          </form>
-          <div className="mt-4 text-center text-sm">
-            Already have an account?{" "}
-            <Link
-              href="/apply/openings/field-officer/login"
-              className="underline"
-            >
-              Log In
-            </Link>
-          </div>
-        </div>
-      </div>
-      <div className="hidden bg-black lg:block"></div>
+              </section>
+            </div>
+          </>
+        )}
+        {step === 3 && (
+          <>
+            <div>
+              <Label>Guarantor Name</Label>
+              <Input required {...register("guarantor_name")} />
+            </div>
+            <div>
+              <Label>Guarantor Phone Number</Label>
+              <Input required {...register("guarantor_phone_number")} />
+            </div>
+            <div>
+              <Label>Guarantor BVN</Label>
+              <Input required {...register("guarantor_bvn")} />
+            </div>
+            <div>
+              <Label>Guarantor NIN</Label>
+              <Input required {...register("guarantor_nin")} />
+            </div>
+            <div>
+              <section className="grid gap-2">
+                <Button color="primary" onClick={prevStep}>
+                  Previous
+                </Button>
+                <Button color="primary" onClick={nextStep}>
+                  Next
+                </Button>
+              </section>
+            </div>
+          </>
+        )}
+        {step === 4 && (
+          <>
+            <div>
+              <Label>Guarantor Address</Label>
+              <Input required {...register("guarantor_address")} />
+            </div>
+            <div>
+              <Label>Date of Birth</Label>
+              <Input required type="date" {...register("date_of_birth")} />
+            </div>
+            <div>
+              <Label>Phone Number</Label>
+              <Input required {...register("phone_number")} />
+            </div>
+            <div>
+              <Label>Guarantor Passport</Label>
+              <Input
+                required
+                type="file"
+                accept="image/*"
+                {...register("guarantor_passport")}
+              />
+              {renderImagePreview("guarantor_passport")}
+            </div>
+            <div>
+              <Label>Profile Image</Label>
+              <Input
+                required
+                type="file"
+                accept="image/*"
+                {...register("profile_image")}
+              />
+              {renderImagePreview("profile_image")}
+            </div>
+            <div>
+              <Label>Signature</Label>
+              <Input
+                required
+                type="file"
+                accept="image/*"
+                {...register("signature")}
+              />
+              {renderImagePreview("signature")}
+            </div>
+            <div>
+              <Label>Passport Photo</Label>
+              <Input
+                required
+                type="file"
+                accept="image/*"
+                {...register("passport_photo")}
+              />
+              {renderImagePreview("passport_photo")}
+            </div>
+            <div className="flex justify-between">
+              <Button color="primary" onClick={prevStep}>
+                Previous
+              </Button>
+              <Button color="primary" type="submit" disabled={loading}>
+                {loading ? (
+                  <AiOutlineLoading className="animate-spin" />
+                ) : success ? (
+                  <AiOutlineCheck size={20} color="#00cc00" />
+                ) : (
+                  <>
+                    Submit Form <MdSend size={20} />
+                  </>
+                )}
+              </Button>
+            </div>
+          </>
+        )}
+      </form>
+      <div className="bg-black md:h-full md:min-h-screen"></div>
     </div>
   );
 }
