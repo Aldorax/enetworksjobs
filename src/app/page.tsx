@@ -1,29 +1,38 @@
-import { Button } from "@/components/button/index";
 import { Card } from "@/components/card";
+import { Button } from "@/components/ui/button";
 import { TextsProvider } from "@/translation";
 import Image from "next/image";
+import { MainNav } from "./(admin)/dashboard/components/main-nav";
+import { UserNav } from "./(admin)/admin/dashboard/components/user-nav";
 
 export default function Home() {
   const texts = TextsProvider.get();
 
   return (
     <main className="">
-      {/* <Header /> */}
-      <section className="mx-6 border-b border-gray-850 py-18 text-center md:mx-28 md:flex md:justify-between md:py-28 md:text-start">
-        <div className="flex flex-col items-center gap-4 md:place-items-start">
-          <h1 className="max-w-[602px] text-4.5xl font-bold text-black md:mt-9 md:text-5.5xl">
+      <div className="fixed z-[995] flex h-16 w-full items-center border-b border-black bg-white px-4 text-black">
+        <MainNav className="mx-6" />
+        <div className="ml-auto flex items-center space-x-4">
+          <UserNav />
+        </div>
+      </div>
+      <section className="border-gray-850 py-18 mx-6 border-b text-center md:mx-28 md:flex md:justify-between md:py-28 md:text-start">
+        <div className="mt-10 flex flex-col items-center gap-4 md:place-items-start">
+          <h1 className="text-4.5xl md:text-5.5xl max-w-[602px] font-bold text-black md:mt-9">
             {texts.FIRST_S_TITLE}
             <span className="text-primary-orange-light">
               {" "}
               {texts.FIRST_S_AUX_TITLE}.{" "}
             </span>
           </h1>
-          <p className="mb-4 max-w-[492px] md:text-1.5xl">
+          <p className="md:text-1.5xl mb-4 max-w-[492px]">
             {texts.FIRST_S_SUB}
           </p>
-          <Button>{texts.APPLY}</Button>
+          <Button className="bg-primary-orange-light " size="lg">
+            {texts.APPLY}
+          </Button>
         </div>
-        <div className="flex flex-col justify-center gap-5 overflow-hidden pt-18 sm:flex-row md:justify-normal md:pl-4 md:pt-0">
+        <div className="pt-18 flex flex-col justify-center gap-5 overflow-hidden sm:flex-row md:justify-normal md:pl-4 md:pt-0">
           <Image
             priority
             alt="woman"
@@ -56,9 +65,9 @@ export default function Home() {
           />
         </div>
       </section>
-      <section className="mx-6 grid gap-16 border-b border-gray-850 py-18 md:mx-28 md:py-28">
+      <section className="border-gray-850 py-18 mx-6 grid gap-16 border-b md:mx-28 md:py-28">
         <div className="flex flex-col justify-between gap-4 text-center lg:flex-row lg:gap-0 lg:text-start">
-          <h2 className="track max-w-2xl text-3xl font-bold text-black md:text-4.5xl">
+          <h2 className="track md:text-4.5xl max-w-2xl text-3xl font-bold text-black">
             {texts.SECOND_S_TITLE}
           </h2>
         </div>
@@ -85,14 +94,14 @@ export default function Home() {
           />
         </div>
       </section>
-      <footer className="mx-6 py-18 md:mx-28 md:py-28">
-        <div className="bg-primary-orange-light-light grid place-items-center gap-6 rounded-xl py-18 text-center md:py-20">
+      <footer className="py-18 mx-6 md:mx-28 md:py-28">
+        <div className="bg-primary-orange-light-light py-18 grid place-items-center gap-6 rounded-xl text-center md:py-20">
           <div className="grid place-items-center gap-2 md:gap-4">
-            <h2 className="max-w-3xl text-3xl font-bold text-black md:text-4.5xl">
+            <h2 className="md:text-4.5xl max-w-3xl text-3xl font-bold text-black">
               {texts.THIRD_S_TITLE}
             </h2>
           </div>
-          <Button>{texts.APPLY}</Button>
+          <Button className="bg-primary-orange-light ">{texts.APPLY}</Button>
         </div>
       </footer>
     </main>

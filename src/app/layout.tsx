@@ -25,9 +25,9 @@ export const metadata: Metadata = {
   title: "E-networks Jobs",
   description: texts.DESCRIPTION,
   openGraph: {
-    title: "Cloud Boost",
+    title: "E-networks Jobs",
     description: texts.DESCRIPTION,
-    url: "",
+    url: "https://www.enetworksjobs.com.ng",
     type: "website"
   }
 };
@@ -40,15 +40,15 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${spaceGrotesk.variable} bg-[#fff] text-[#459dc5]`}
+      className={`${inter.variable} ${spaceGrotesk.variable} bg-[#fff]`}
     >
       <body>
-        <div className="fixed z-[995] flex h-16 w-full items-center border-b border-black bg-white px-4 text-black">
+        {/* <div className="fixed z-[995] flex h-16 w-full items-center border-b border-black bg-white px-4 text-black">
           <MainNav className="mx-6" />
           <div className="ml-auto flex items-center space-x-4">
             <UserNav />
           </div>
-        </div>
+        </div> */}
         {children}
       </body>
     </html>

@@ -64,6 +64,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export function UserNav() {
   return (
@@ -72,11 +73,8 @@ export function UserNav() {
         Apply
       </Link>
 
-      <Link
-        href="/login"
-        className="rounded-md bg-primary-orange-light p-2 text-white"
-      >
-        Log In
+      <Link href="/login" className="rounded-md p-2">
+        <Button className="bg-primary-orange-light ">Log In </Button>
       </Link>
     </div>
   );
