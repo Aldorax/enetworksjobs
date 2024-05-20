@@ -49,9 +49,11 @@ export default function Dashboard() {
               </div>
               <Input id="password" type="password" required />
             </div>
-            <Button type="submit" className="w-full">
-              Login
-            </Button>
+            <Link href="/staff/referred-field/dashboard">
+              <Button type="submit" className="w-full">
+                Login
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
