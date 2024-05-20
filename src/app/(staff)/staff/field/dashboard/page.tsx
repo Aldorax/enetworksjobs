@@ -11,7 +11,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable
+  useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown } from "lucide-react";
 import {
@@ -20,13 +20,13 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from "@/registry/new-york/ui/card";
 import {
   Tabs,
   TabsContent,
   TabsList,
-  TabsTrigger
+  TabsTrigger,
 } from "@/registry/new-york/ui/tabs";
 import { MainNav } from "./components/main-nav";
 import { Overview } from "./components/overview";
@@ -42,7 +42,7 @@ import {
   CreditCard,
   MoreHorizontal,
   MoreVertical,
-  Truck
+  Truck,
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -51,7 +51,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
+  TableRow,
 } from "@/registry/new-york/ui/table";
 import { Badge } from "@/registry/default/ui/badge";
 import {
@@ -61,13 +61,13 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@/registry/new-york/ui/dropdown-menu";
 import Image from "next/image";
 import {
   Pagination,
   PaginationContent,
-  PaginationItem
+  PaginationItem,
 } from "@/registry/new-york/ui/pagination";
 import { Separator } from "@/registry/new-york/ui/separator";
 import { SidebarNav } from "@/app/(admin)/admin/dashboard/forms/components/sidebar-nav";
@@ -90,44 +90,44 @@ const data: Payment[] = [
     id: "m5gr84i9",
     status: "success",
     email: "ken99@yahoo.com",
-    date: "20th may, 2024"
+    date: "20th may, 2024",
   },
   {
     id: "3u1reuv4",
     status: "success",
     email: "Abe45@gmail.com",
-    date: "20th may, 2024"
+    date: "20th may, 2024",
   },
   {
     id: "derv1ws0",
     status: "processing",
     email: "Monserrat44@gmail.com",
-    date: "20th may, 2024"
+    date: "20th may, 2024",
   },
   {
     id: "5kma53ae",
     status: "success",
     email: "Silas22@gmail.com",
-    date: "20th may, 2024"
+    date: "20th may, 2024",
   },
   {
     id: "bhqecj4p",
     status: "failed",
     email: "carmella@hotmail.com",
-    date: "20th may, 2024"
+    date: "20th may, 2024",
   },
   {
     id: "bhqecj4s",
     status: "failed",
     email: "carmeslla@hotmail.com",
-    date: "20th may, 2024"
+    date: "20th may, 2024",
   },
   {
     id: "bhdscj4p",
     status: "failed",
     email: "mella@hotmail.com",
-    date: "20th may, 2024"
-  }
+    date: "20th may, 2024",
+  },
 ];
 
 export type Payment = {
@@ -146,26 +146,26 @@ export const columns: ColumnDef<Payment>[] = [
           table.getIsAllPageRowsSelected() ||
           (table.getIsSomePageRowsSelected() && "indeterminate")
         }
-        onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
       />
     ),
     cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}
-        onCheckedChange={value => row.toggleSelected(!!value)}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label="Select row"
       />
     ),
     enableSorting: false,
-    enableHiding: false
+    enableHiding: false,
   },
   {
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => (
       <div className="capitalize">{row.getValue("status")}</div>
-    )
+    ),
   },
   {
     accessorKey: "email",
@@ -180,13 +180,13 @@ export const columns: ColumnDef<Payment>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>
+    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
   },
   {
     accessorKey: "date",
     header: "Date Onboarded",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("date")}</div>
-  }
+    cell: ({ row }) => <div className="capitalize">{row.getValue("date")}</div>,
+  },
   // {
   //   id: "actions",
   //   enableHiding: false,
@@ -226,24 +226,24 @@ export default function DashboardPage() {
   const sidebarNavItems = [
     {
       title: "Profile",
-      href: "/admin/dashboard/forms"
+      href: "/admin/dashboard/forms",
     },
     {
       title: "Account",
-      href: "/admin/dashboard/forms/account"
+      href: "/admin/dashboard/forms/account",
     },
     {
       title: "Appearance",
-      href: "/admin/dashboard/forms/appearance"
+      href: "/admin/dashboard/forms/appearance",
     },
     {
       title: "Notifications",
-      href: "/admin/dashboard/forms/notifications"
+      href: "/admin/dashboard/forms/notifications",
     },
     {
       title: "Display",
-      href: "/admin/dashboard/forms/display"
-    }
+      href: "/admin/dashboard/forms/display",
+    },
   ];
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -255,7 +255,7 @@ export default function DashboardPage() {
   const [rowSelection, setRowSelection] = React.useState({});
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 5 // Page size fixed at 10 rows per page
+    pageSize: 5, // Page size fixed at 10 rows per page
   });
 
   const table = useReactTable({
@@ -266,7 +266,7 @@ export default function DashboardPage() {
       columnFilters,
       columnVisibility,
       rowSelection,
-      pagination
+      pagination,
     },
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -276,7 +276,7 @@ export default function DashboardPage() {
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel()
+    getFilteredRowModel: getFilteredRowModel(),
   });
 
   const pageCount = table.getPageCount();
@@ -292,7 +292,7 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
-        <div className="flex-1 space-y-4 p-8 pt-6">
+        <div className="flex-1 space-y-4 p-3 md:p-8 pt-6">
           <div className="flex items-center justify-between space-y-2">
             <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
           </div>
@@ -559,7 +559,7 @@ export default function DashboardPage() {
                       (table.getColumn("email")?.getFilterValue() as string) ??
                       ""
                     }
-                    onChange={event =>
+                    onChange={(event) =>
                       table
                         .getColumn("email")
                         ?.setFilterValue(event.target.value)
@@ -575,13 +575,13 @@ export default function DashboardPage() {
                     <DropdownMenuContent align="end">
                       {table
                         .getAllColumns()
-                        .filter(column => column.getCanHide())
-                        .map(column => (
+                        .filter((column) => column.getCanHide())
+                        .map((column) => (
                           <DropdownMenuCheckboxItem
                             key={column.id}
                             className="capitalize"
                             checked={column.getIsVisible()}
-                            onCheckedChange={value =>
+                            onCheckedChange={(value) =>
                               column.toggleVisibility(!!value)
                             }
                           >
@@ -594,9 +594,9 @@ export default function DashboardPage() {
                 <div className="rounded-md border">
                   <Table>
                     <TableHeader>
-                      {table.getHeaderGroups().map(headerGroup => (
+                      {table.getHeaderGroups().map((headerGroup) => (
                         <TableRow key={headerGroup.id}>
-                          {headerGroup.headers.map(header => (
+                          {headerGroup.headers.map((header) => (
                             <TableHead key={header.id}>
                               {header.isPlaceholder
                                 ? null
@@ -611,12 +611,12 @@ export default function DashboardPage() {
                     </TableHeader>
                     <TableBody>
                       {table.getRowModel().rows.length ? (
-                        table.getRowModel().rows.map(row => (
+                        table.getRowModel().rows.map((row) => (
                           <TableRow
                             key={row.id}
                             data-state={row.getIsSelected() && "selected"}
                           >
-                            {row.getVisibleCells().map(cell => (
+                            {row.getVisibleCells().map((cell) => (
                               <TableCell key={cell.id}>
                                 {flexRender(
                                   cell.column.columnDef.cell,
