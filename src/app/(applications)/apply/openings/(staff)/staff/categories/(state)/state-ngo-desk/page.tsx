@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { AiOutlineCheck, AiOutlineLoading } from "react-icons/ai";
+
+import image from "/public/images/medium-shot-people-looking-laptop.jpg";
 import { MdSend } from "react-icons/md";
 import { Label } from "@/components/ui/label";
 import {
@@ -15,8 +17,11 @@ import {
   SelectItem,
   SelectLabel,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from "@/components/ui/select";
+import Image from "next/image";
+import { MainNav } from "@/app/(admin)/admin/dashboard/components/main-nav";
+import { UserNav } from "@/app/(admin)/admin/dashboard/components/user-nav";
 
 export default function StateNgoDesk() {
   const router = useRouter();
@@ -28,7 +33,7 @@ export default function StateNgoDesk() {
     handleSubmit,
     watch,
     setValue,
-    formState: { errors }
+    formState: { errors },
   } = useForm();
 
   const valid_genders = ["male", "female"];
@@ -44,7 +49,7 @@ export default function StateNgoDesk() {
     "Legal Adviser",
     "Women Affairs Officer",
     "Youth Affairs Officer",
-    "Organising Officer"
+    "Organising Officer",
   ];
   const valid_locations = [
     "abia",
@@ -83,7 +88,7 @@ export default function StateNgoDesk() {
     "sokoto",
     "taraba",
     "yobe",
-    "zamfara"
+    "zamfara",
   ];
 
   // Watch the 'gender' field to handle its state
@@ -114,16 +119,13 @@ export default function StateNgoDesk() {
     });
 
     try {
-      const response = await fetch(
-        "https://enetworks-tovimikailu.koyeb.app/create_account",
-        {
-          method: "POST",
-          body: formData,
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          }
-        }
-      );
+      const response = await fetch("http://localhost:8000/staff/apply", {
+        method: "POST",
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
 
       if (!accessToken) {
         setLoading(false);
@@ -144,8 +146,8 @@ export default function StateNgoDesk() {
     }
   };
 
-  const nextStep = () => setStep(prev => prev + 1);
-  const prevStep = () => setStep(prev => prev - 1);
+  const nextStep = () => setStep((prev) => prev + 1);
+  const prevStep = () => setStep((prev) => prev - 1);
 
   const renderImagePreview = (field: string) => {
     const file = watch(field)?.[0];
@@ -160,6 +162,12 @@ export default function StateNgoDesk() {
 
   return (
     <div className="grid h-full grid-cols-1 md:grid-cols-2">
+      <div className="fixed z-[995] flex h-16 w-full items-center border-b border-black bg-white px-4 text-black">
+        <MainNav className="mx-6" />
+        <div className="ml-auto flex items-center space-x-4">
+          <UserNav />
+        </div>
+      </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex h-full min-h-screen w-full flex-col justify-center space-y-2 rounded-md bg-white p-6 pt-20 text-black"
@@ -218,14 +226,14 @@ export default function StateNgoDesk() {
               <Label>State Of Origin</Label>
               {/* <Input required {...register("state")} /> */}
               <Select
-                onValueChange={value => setValue("state_of_origin", value)}
+                onValueChange={(value) => setValue("state_of_origin", value)}
                 value={state || ""}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select your state" />
                 </SelectTrigger>
                 <SelectContent>
-                  {valid_locations.map(item => (
+                  {valid_locations.map((item) => (
                     <SelectItem key={item} value={item}>
                       {item.charAt(0).toUpperCase() + item.slice(1)}
                     </SelectItem>
@@ -244,14 +252,14 @@ export default function StateNgoDesk() {
             <div>
               <Label>Gender</Label>
               <Select
-                onValueChange={value => setValue("gender", value)}
+                onValueChange={(value) => setValue("gender", value)}
                 value={gender || ""}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select your gender" />
                 </SelectTrigger>
                 <SelectContent>
-                  {valid_genders.map(item => (
+                  {valid_genders.map((item) => (
                     <SelectItem key={item} value={item}>
                       {item.charAt(0).toUpperCase() + item.slice(1)}
                     </SelectItem>
@@ -321,14 +329,14 @@ export default function StateNgoDesk() {
               <Label>What Position are you applying for?</Label>
               {/* <Input required type="date" {...register("date_of_birth")} /> */}
               <Select
-                onValueChange={value => setValue("preferred_position", value)}
+                onValueChange={(value) => setValue("preferred_position", value)}
                 value={position || ""}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Choose a position" />
                 </SelectTrigger>
                 <SelectContent>
-                  {valid_positions.map(item => (
+                  {valid_positions.map((item) => (
                     <SelectItem key={item} value={item}>
                       {item.charAt(0).toUpperCase() + item.slice(1)}
                     </SelectItem>
@@ -339,14 +347,14 @@ export default function StateNgoDesk() {
             <div>
               <Label>What state do you want to work in?</Label>
               <Select
-                onValueChange={value => setValue("preferred_location", value)}
+                onValueChange={(value) => setValue("preferred_location", value)}
                 value={workState || ""}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select a work state" />
                 </SelectTrigger>
                 <SelectContent>
-                  {valid_locations.map(item => (
+                  {valid_locations.map((item) => (
                     <SelectItem key={item} value={item}>
                       {item.charAt(0).toUpperCase() + item.slice(1)}
                     </SelectItem>
@@ -383,7 +391,15 @@ export default function StateNgoDesk() {
           </>
         )}
       </form>
-      <div className="bg-black md:h-full md:min-h-screen"></div>
+      <div className="bg-black hidden md:block">
+        <Image
+          src={image}
+          alt="working"
+          width={1000}
+          height={1000}
+          className="w-auto h-full bg-cover"
+        />
+      </div>
     </div>
   );
 }

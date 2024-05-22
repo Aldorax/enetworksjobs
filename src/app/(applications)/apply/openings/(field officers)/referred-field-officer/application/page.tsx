@@ -2,6 +2,7 @@
 // components/Input requiredForm.tsx
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import image from "/public/images/medium-shot-people-looking-laptop.jpg";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -15,8 +16,11 @@ import {
   SelectItem,
   SelectLabel,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from "@/components/ui/select";
+import { MainNav } from "@/app/(admin)/admin/dashboard/components/main-nav";
+import { UserNav } from "@/app/(admin)/admin/dashboard/components/user-nav";
+import Image from "next/image";
 
 export default function FieldApplication() {
   const router = useRouter();
@@ -28,7 +32,7 @@ export default function FieldApplication() {
     handleSubmit,
     watch,
     setValue,
-    formState: { errors }
+    formState: { errors },
   } = useForm();
 
   // Watch the 'gender' field to handle its state
@@ -60,8 +64,8 @@ export default function FieldApplication() {
         method: "POST",
         body: formData,
         headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
 
       if (!accessToken) {
@@ -82,8 +86,8 @@ export default function FieldApplication() {
     }
   };
 
-  const nextStep = () => setStep(prev => prev + 1);
-  const prevStep = () => setStep(prev => prev - 1);
+  const nextStep = () => setStep((prev) => prev + 1);
+  const prevStep = () => setStep((prev) => prev - 1);
 
   const renderImagePreview = (field: string) => {
     const file = watch(field)?.[0];
@@ -98,6 +102,12 @@ export default function FieldApplication() {
 
   return (
     <div className="grid h-full grid-cols-1 md:grid-cols-2">
+      <div className="fixed z-[995] flex h-16 w-full items-center border-b border-black bg-white px-4 text-black">
+        <MainNav className="mx-6" />
+        <div className="ml-auto flex items-center space-x-4">
+          <UserNav />
+        </div>
+      </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex h-full min-h-screen w-full flex-col justify-center space-y-2 rounded-md bg-white p-6 pt-20 text-black"
@@ -168,7 +178,7 @@ export default function FieldApplication() {
             <div>
               <Label>Gender</Label>
               <Select
-                onValueChange={value => setValue("gender", value)}
+                onValueChange={(value) => setValue("gender", value)}
                 value={gender || ""}
               >
                 <SelectTrigger>
@@ -296,7 +306,15 @@ export default function FieldApplication() {
           </>
         )}
       </form>
-      <div className="bg-black md:h-full md:min-h-screen"></div>
+      <div className="bg-black hidden md:block">
+        <Image
+          src={image}
+          alt="working"
+          width={1000}
+          height={1000}
+          className="w-auto h-full bg-cover"
+        />
+      </div>
     </div>
   );
 }

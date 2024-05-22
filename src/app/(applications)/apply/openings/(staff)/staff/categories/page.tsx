@@ -1,13 +1,20 @@
+import { MainNav } from "@/app/(admin)/admin/dashboard/components/main-nav";
+import { UserNav } from "@/app/(admin)/admin/dashboard/components/user-nav";
 import { StaffCategories } from "@/components/aceternity/staffCategories";
 import Link from "next/link";
 
 export default function StaffCat() {
   return (
     <div className="max-w-screen grid h-screen max-h-full w-screen grid-cols-1 justify-evenly lg:grid-cols-2">
-      {/* Requirments */}
-      <div className="flex h-full max-w-full flex-col bg-white p-3 py-18 text-black md:p-10 lg:min-h-screen">
+      <div className="fixed z-[995] flex h-16 w-full items-center border-b border-black bg-white px-2 text-black">
+        <MainNav className="mx-6" />
+        <div className="ml-auto flex items-center space-x-4">
+          <UserNav />
+        </div>
+      </div>
+      <div className="flex h-full max-w-full flex-col bg-white p-3 pt-18 text-black md:p-10 lg:min-h-screen">
         <div className="flex flex-col">
-          <div className="mt-4">
+          <div className="mt-10">
             <div className="text-xl font-bold underline">
               Requirements for Applying
             </div>
@@ -148,7 +155,7 @@ export default function StaffCat() {
         </div>
       </div>
       {/* Categories */}
-      <div className="flex h-full max-w-full flex-col bg-gray-200 p-10 py-18 text-black md:h-screen">
+      <div className="flex h-full w-full max-w-full flex-col bg-gray-200 p-4 md:p-10 py-18 text-black md:h-screen">
         <StaffCategories />
         <div className="mt-4 w-full p-4 text-black">
           <h1>

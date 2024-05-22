@@ -1,7 +1,7 @@
 import {
   Avatar,
   AvatarFallback,
-  AvatarImage
+  AvatarImage,
 } from "@/registry/new-york/ui/avatar";
 import { Button } from "@/registry/new-york/ui/button";
 import {
@@ -11,7 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@/registry/new-york/ui/dropdown-menu";
 
 export function UserNav() {
@@ -32,27 +32,12 @@ export function UserNav() {
       >
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">shadcn</p>
+            <p className="text-sm font-medium leading-none">Emmanuel Appah</p>
             <p className="text-muted-foreground text-xs leading-none">
-              m@example.com
+              lega@gmail.com
             </p>
           </div>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator className="bg-black" />
-        <DropdownMenuGroup>
-          <DropdownMenuItem className="cursor-pointer hover:bg-gray-600">
-            Profile
-          </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer hover:bg-gray-600">
-            Billing
-          </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer hover:bg-gray-600">
-            Settings
-          </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer hover:bg-gray-600">
-            New Team
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
         <DropdownMenuSeparator className="bg-black" />
         <DropdownMenuItem className="cursor-pointer hover:bg-gray-600">
           Log out

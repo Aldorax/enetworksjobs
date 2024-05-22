@@ -85,50 +85,7 @@ type PaginationState = {
   pageSize: number;
 };
 
-const data: Payment[] = [
-  {
-    id: "m5gr84i9",
-    status: "success",
-    email: "ken99@yahoo.com",
-    date: "20th may, 2024",
-  },
-  {
-    id: "3u1reuv4",
-    status: "success",
-    email: "Abe45@gmail.com",
-    date: "20th may, 2024",
-  },
-  {
-    id: "derv1ws0",
-    status: "processing",
-    email: "Monserrat44@gmail.com",
-    date: "20th may, 2024",
-  },
-  {
-    id: "5kma53ae",
-    status: "success",
-    email: "Silas22@gmail.com",
-    date: "20th may, 2024",
-  },
-  {
-    id: "bhqecj4p",
-    status: "failed",
-    email: "carmella@hotmail.com",
-    date: "20th may, 2024",
-  },
-  {
-    id: "bhqecj4s",
-    status: "failed",
-    email: "carmeslla@hotmail.com",
-    date: "20th may, 2024",
-  },
-  {
-    id: "bhdscj4p",
-    status: "failed",
-    email: "mella@hotmail.com",
-    date: "20th may, 2024",
-  },
-];
+const data: Payment[] = [];
 
 export type Payment = {
   id: string;
@@ -223,29 +180,6 @@ export const columns: ColumnDef<Payment>[] = [
 ];
 
 export default function DashboardPage() {
-  const sidebarNavItems = [
-    {
-      title: "Profile",
-      href: "/admin/dashboard/forms",
-    },
-    {
-      title: "Account",
-      href: "/admin/dashboard/forms/account",
-    },
-    {
-      title: "Appearance",
-      href: "/admin/dashboard/forms/appearance",
-    },
-    {
-      title: "Notifications",
-      href: "/admin/dashboard/forms/notifications",
-    },
-    {
-      title: "Display",
-      href: "/admin/dashboard/forms/display",
-    },
-  ];
-
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -255,7 +189,7 @@ export default function DashboardPage() {
   const [rowSelection, setRowSelection] = React.useState({});
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 5, // Page size fixed at 10 rows per page
+    pageSize: 10,
   });
 
   const table = useReactTable({
@@ -308,7 +242,7 @@ export default function DashboardPage() {
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
-                      Total Revenue
+                      Total Onboarding
                     </CardTitle>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -324,16 +258,16 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">$45,231.89</div>
+                    <div className="text-2xl font-bold">0</div>
                     <p className="text-xs text-muted-foreground">
-                      +20.1% from last month
+                      +0.00% overall
                     </p>
                   </CardContent>
                 </Card>
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
-                      Subscriptions
+                      Total onboarding completed
                     </CardTitle>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -351,15 +285,17 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">+2350</div>
+                    <div className="text-2xl font-bold">+0</div>
                     <p className="text-xs text-muted-foreground">
-                      +180.1% from last month
+                      +0.00% from last month
                     </p>
                   </CardContent>
                 </Card>
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Sales</CardTitle>
+                    <CardTitle className="text-sm font-medium">
+                      Current monthly users onboarded
+                    </CardTitle>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -375,16 +311,16 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">+12,234</div>
+                    <div className="text-2xl font-bold">+0</div>
                     <p className="text-xs text-muted-foreground">
-                      +19% from last month
+                      +0.00% from last month
                     </p>
                   </CardContent>
                 </Card>
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
-                      Active Now
+                      Default onboarding target
                     </CardTitle>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -400,10 +336,8 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">+573</div>
-                    <p className="text-xs text-muted-foreground">
-                      +201 since last hour
-                    </p>
+                    <div className="text-2xl font-bold">50</div>
+                    <p className="text-xs text-muted-foreground">Monthly</p>
                   </CardContent>
                 </Card>
               </div>
@@ -418,7 +352,7 @@ export default function DashboardPage() {
                 </Card>
                 <Card className="col-span-3">
                   <CardHeader>
-                    <CardTitle>Recent Sales</CardTitle>
+                    <CardTitle>Recent Onboards</CardTitle>
                     <CardDescription>
                       You made 265 sales this month.
                     </CardDescription>
@@ -603,13 +537,13 @@ export default function DashboardPage() {
                           <span className="text-muted-foreground">
                             Glimmer Lamps x <span>2</span>
                           </span>
-                          <span>$250.00</span>
+                          <span>250.00</span>
                         </li>
                         <li className="flex items-center justify-between">
                           <span className="text-muted-foreground">
                             Aqua Filters x <span>1</span>
                           </span>
-                          <span>$49.00</span>
+                          <span>49.00</span>
                         </li>
                       </ul>
                       <Separator className="my-2" />
@@ -618,21 +552,21 @@ export default function DashboardPage() {
                           <span className="text-muted-foreground">
                             Subtotal
                           </span>
-                          <span>$299.00</span>
+                          <span>299.00</span>
                         </li>
                         <li className="flex items-center justify-between">
                           <span className="text-muted-foreground">
                             Shipping
                           </span>
-                          <span>$5.00</span>
+                          <span>5.00</span>
                         </li>
                         <li className="flex items-center justify-between">
                           <span className="text-muted-foreground">Tax</span>
-                          <span>$25.00</span>
+                          <span>25.00</span>
                         </li>
                         <li className="flex items-center justify-between font-semibold">
                           <span className="text-muted-foreground">Total</span>
-                          <span>$329.00</span>
+                          <span>329.00</span>
                         </li>
                       </ul>
                     </div>

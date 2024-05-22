@@ -12,7 +12,7 @@ export function MainNav({
       className={cn("flex items-center space-x-2 lg:space-x-6", className)}
       {...props}
     >
-      <Link href="#" className="flex items-center gap-2 font-medium">
+      <Link href="/" className="flex items-center gap-2 font-medium">
         <Image
           src="/images/e-logo.png"
           alt="logo"

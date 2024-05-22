@@ -3,12 +3,12 @@ import { BentoGrid, BentoGridItem } from "@/components/aceternity/bentoGrids";
 import {
   IconClipboardCopy,
   IconFileBroken,
-  IconSignature
+  IconSignature,
 } from "@tabler/icons-react";
 
 export function StaffCategories() {
   return (
-    <BentoGrid className="mx-auto w-full md:max-w-4xl md:auto-rows-[20rem]">
+    <BentoGrid className="mx-auto w-full rounded-lg p-2 md:max-w-4xl md:auto-rows-[22rem]">
       {items.map((item, i) => (
         <BentoGridItem
           key={i}
@@ -33,7 +33,7 @@ const items = [
     header: <Skeleton />,
     className: "md:col-span-1 border border-black",
     icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
-    href: "/apply/openings/staff/categories/state-govt-office"
+    href: "/apply/openings/staff/categories/state-govt-office",
   },
   {
     title: "State N.G.O Desk Office Position",
@@ -42,7 +42,7 @@ const items = [
     header: <Skeleton />,
     className: "md:col-span-1 border border-black",
     icon: <IconFileBroken className="h-4 w-4 text-neutral-500" />,
-    href: "/apply/openings/staff/categories/state-ngo-desk"
+    href: "/apply/openings/staff/categories/state-ngo-desk",
   },
   {
     title: "Local Govt. Business Office Positions",
@@ -50,7 +50,7 @@ const items = [
     header: <Skeleton />,
     className: "md:col-span-1 border border-black",
     icon: <IconSignature className="h-4 w-4 text-neutral-500" />,
-    href: "/apply/openings/staff/categories/local-govt-office"
+    href: "/apply/openings/staff/categories/local-govt-office",
   },
   {
     title: "Local Govt. N.G.O Desk Office Postions",
@@ -58,6 +58,6 @@ const items = [
     header: <Skeleton />,
     className: "md:col-span-1 border border-black",
     icon: <IconSignature className="h-4 w-4 text-neutral-500" />,
-    href: "/apply/openings/staff/categories/local-ngo-desk"
-  }
+    href: "/apply/openings/staff/categories/local-ngo-desk",
+  },
 ];

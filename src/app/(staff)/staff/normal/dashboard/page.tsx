@@ -1,5 +1,6 @@
 "use client";
-// import { type Metadata } from "next";
+import useSWR from "swr";
+import { fetcher } from "@/utils/apiUtils";
 import React from "react";
 import {
   ColumnDef,
@@ -75,6 +76,7 @@ import { Input } from "@/registry/new-york/ui/input";
 import { Checkbox } from "@/registry/new-york/ui/checkbox";
 import { ProfileForm } from "@/app/(admin)/admin/dashboard/forms/profile-form";
 import { Label } from "@/registry/new-york/ui/label";
+import { Icons } from "@/components/icons";
 
 // export const metadata: Metadata = {
 //   title: "Dashboard",
@@ -84,49 +86,66 @@ type PaginationState = {
   pageIndex: number;
   pageSize: number;
 };
+interface StaffData {
+  monthly_target: number;
+  referrals_this_month: number;
+  referrals_this_week: number;
+  referrals_today: number;
+  total_referrals: number;
+  user_id: string;
+}
+interface Referral {
+  id: number;
+  monthly_target: number;
+  total_referrals_completed: number;
+  user_id: string;
+}
+
+interface SuccessfulReferral {
+  id: number;
+  referral_id: number | null;
+  referred_user_card_number: string;
+  referred_user_email: string;
+  referred_user_name: string;
+  referrer_id: string;
+  timestamp: string;
+  validity: boolean;
+}
+
+interface StaffData {
+  full_name: string;
+  id: string;
+  office_status: boolean;
+  referral: Referral;
+  successful_referrals: SuccessfulReferral[];
+}
+
+interface AnotherData {
+  monthly_target: string;
+  referrals_this_month: string;
+  referrals_this_week: string;
+  referrals_today: string;
+  total_referrals: string;
+  user_id: string;
+}
+
+interface ReferralData {
+  id: number;
+  referral_id: string;
+  referred_user_card_number: string;
+  referred_user_email: string;
+  referred_user_name: string;
+  referrer_id: string;
+  timestamp: string;
+  validity: true;
+}
 
 const data: Payment[] = [
   {
-    id: "m5gr84i9",
-    status: "success",
-    email: "ken99@yahoo.com",
-    date: "20th may, 2024",
-  },
-  {
-    id: "3u1reuv4",
-    status: "success",
-    email: "Abe45@gmail.com",
-    date: "20th may, 2024",
-  },
-  {
-    id: "derv1ws0",
-    status: "processing",
-    email: "Monserrat44@gmail.com",
-    date: "20th may, 2024",
-  },
-  {
-    id: "5kma53ae",
-    status: "success",
-    email: "Silas22@gmail.com",
-    date: "20th may, 2024",
-  },
-  {
-    id: "bhqecj4p",
-    status: "failed",
-    email: "carmella@hotmail.com",
-    date: "20th may, 2024",
-  },
-  {
-    id: "bhqecj4s",
-    status: "failed",
-    email: "carmeslla@hotmail.com",
-    date: "20th may, 2024",
-  },
-  {
-    id: "bhdscj4p",
-    status: "failed",
-    email: "mella@hotmail.com",
-    date: "20th may, 2024",
+    date: "10th may",
+    email: "lega@gmail.com",
+    id: "1234",
+    status: "pending",
   },
 ];
 
@@ -223,28 +242,38 @@ export const columns: ColumnDef<Payment>[] = [
 ];
 
 export default function DashboardPage() {
-  const sidebarNavItems = [
-    {
-      title: "Profile",
-      href: "/admin/dashboard/forms",
-    },
-    {
-      title: "Account",
-      href: "/admin/dashboard/forms/account",
-    },
-    {
-      title: "Appearance",
-      href: "/admin/dashboard/forms/appearance",
-    },
-    {
-      title: "Notifications",
-      href: "/admin/dashboard/forms/notifications",
-    },
-    {
-      title: "Display",
-      href: "/admin/dashboard/forms/display",
-    },
-  ];
+  const {
+    data: staff,
+    error: staffError,
+    isValidating: isStaffValidating,
+  } = useSWR<StaffData>("http://localhost:8000/staff/dashboard", fetcher);
+  const {
+    data: referrals,
+    error: anotherError,
+    isValidating: isAnotherValidating,
+  } = useSWR<AnotherData>("http://localhost:8000/staff/referral", fetcher);
+
+  const {
+    data: referrals1,
+    error: anotherError1,
+    isValidating: isAnotherValidating1,
+  } = useSWR<ReferralData[]>(
+    "http://localhost:8000/staff/successful_referrals",
+    fetcher
+  );
+
+  // Ensure that referrals1 is an array before mapping
+  const mappedData: Payment[] = Array.isArray(referrals1)
+    ? referrals1.map((referral) => ({
+        id: referral.id.toString(),
+        status: referral.validity ? "success" : "failed",
+        email: referral.referred_user_email,
+        date: new Date(referral.timestamp).toLocaleDateString(),
+      }))
+    : [];
+
+  // Log the mapped data for debugging purposes
+  console.log("Mapped data:", mappedData);
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -255,11 +284,11 @@ export default function DashboardPage() {
   const [rowSelection, setRowSelection] = React.useState({});
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 5, // Page size fixed at 10 rows per page
+    pageSize: 10,
   });
 
   const table = useReactTable({
-    data,
+    data: mappedData,
     columns,
     state: {
       sorting,
@@ -281,6 +310,22 @@ export default function DashboardPage() {
 
   const pageCount = table.getPageCount();
 
+  if (staffError) {
+    return <div>{staffError.message}</div>;
+  }
+
+  if (anotherError) {
+    return <div>{anotherError.message}</div>;
+  }
+
+  if (anotherError1) {
+    return <div>{anotherError1.message}</div>;
+  }
+
+  if (!staff || !referrals || !referrals1) {
+    return null;
+  }
+
   return (
     <>
       <div className="h-full min-h-screen flex-col bg-white text-black md:flex">
@@ -296,7 +341,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between space-y-2">
             <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
           </div>
-          <Tabs defaultValue="overview" className="space-y-4">
+          <Tabs defaultValue="analytics" className="space-y-4">
             <TabsList>
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="analytics">Analytics</TabsTrigger>
@@ -308,7 +353,7 @@ export default function DashboardPage() {
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
-                      Total Revenue
+                      Total Onboarding
                     </CardTitle>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -324,16 +369,18 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">$45,231.89</div>
+                    <div className="text-2xl font-bold">
+                      {referrals.total_referrals}
+                    </div>
                     <p className="text-xs text-muted-foreground">
-                      +20.1% from last month
+                      +0.00% overall
                     </p>
                   </CardContent>
                 </Card>
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
-                      Subscriptions
+                      Current Week onboards
                     </CardTitle>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -351,15 +398,19 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">+2350</div>
+                    <div className="text-2xl font-bold">
+                      +{referrals.referrals_this_week}
+                    </div>
                     <p className="text-xs text-muted-foreground">
-                      +180.1% from last month
+                      +0.00% from last month
                     </p>
                   </CardContent>
                 </Card>
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Sales</CardTitle>
+                    <CardTitle className="text-sm font-medium">
+                      Current monthly users onboarded
+                    </CardTitle>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -375,16 +426,18 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">+12,234</div>
+                    <div className="text-2xl font-bold">
+                      +{referrals.referrals_this_month}
+                    </div>
                     <p className="text-xs text-muted-foreground">
-                      +19% from last month
+                      +0.00% from last month
                     </p>
                   </CardContent>
                 </Card>
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
-                      Active Now
+                      Default onboarding target
                     </CardTitle>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -400,10 +453,8 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">+573</div>
-                    <p className="text-xs text-muted-foreground">
-                      +201 since last hour
-                    </p>
+                    <div className="text-2xl font-bold">50</div>
+                    <p className="text-xs text-muted-foreground">Monthly</p>
                   </CardContent>
                 </Card>
               </div>
@@ -418,9 +469,10 @@ export default function DashboardPage() {
                 </Card>
                 <Card className="col-span-3">
                   <CardHeader>
-                    <CardTitle>Recent Sales</CardTitle>
+                    <CardTitle>Recent Onboards</CardTitle>
                     <CardDescription>
-                      You made 265 sales this month.
+                      You carried out {referrals.referrals_this_month} onboards
+                      this month.
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -603,13 +655,13 @@ export default function DashboardPage() {
                           <span className="text-muted-foreground">
                             Glimmer Lamps x <span>2</span>
                           </span>
-                          <span>$250.00</span>
+                          <span>250.00</span>
                         </li>
                         <li className="flex items-center justify-between">
                           <span className="text-muted-foreground">
                             Aqua Filters x <span>1</span>
                           </span>
-                          <span>$49.00</span>
+                          <span>49.00</span>
                         </li>
                       </ul>
                       <Separator className="my-2" />
@@ -618,21 +670,21 @@ export default function DashboardPage() {
                           <span className="text-muted-foreground">
                             Subtotal
                           </span>
-                          <span>$299.00</span>
+                          <span>299.00</span>
                         </li>
                         <li className="flex items-center justify-between">
                           <span className="text-muted-foreground">
                             Shipping
                           </span>
-                          <span>$5.00</span>
+                          <span>5.00</span>
                         </li>
                         <li className="flex items-center justify-between">
                           <span className="text-muted-foreground">Tax</span>
-                          <span>$25.00</span>
+                          <span>25.00</span>
                         </li>
                         <li className="flex items-center justify-between font-semibold">
                           <span className="text-muted-foreground">Total</span>
-                          <span>$329.00</span>
+                          <span>329.00</span>
                         </li>
                       </ul>
                     </div>

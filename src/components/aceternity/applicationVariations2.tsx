@@ -3,12 +3,12 @@ import { BentoGrid, BentoGridItem } from "@/components/aceternity/bentoGrids2";
 import {
   IconClipboardCopy,
   IconFileBroken,
-  IconSignature
+  IconSignature,
 } from "@tabler/icons-react";
 
 export function BentoGridSecondDemo2() {
   return (
-    <BentoGrid className="mx-auto w-full rounded-lg bg-white p-5 md:max-w-4xl md:auto-rows-[20rem]">
+    <BentoGrid className="mx-auto w-full rounded-lg bg-white p-2 md:max-w-4xl md:auto-rows-[22rem]">
       {items.map((item, i) => (
         <BentoGridItem
           key={i}
@@ -33,7 +33,7 @@ const items = [
     header: <Skeleton />,
     className: "md:col-span-1 border border-black",
     icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
-    href: "/apply/openings/staff/categories"
+    href: "/apply/openings/staff/categories",
   },
   {
     title: "Referred Field Officer Position",
@@ -41,7 +41,7 @@ const items = [
     header: <Skeleton />,
     className: "md:col-span-1 border border-black",
     icon: <IconFileBroken className="h-4 w-4 text-neutral-500" />,
-    href: "/apply/openings/referred-field-officer/application"
+    href: "/apply/openings/referred-field-officer/application",
   },
   {
     title: "Field Officer Position",
@@ -49,6 +49,6 @@ const items = [
     header: <Skeleton />,
     className: "md:col-span-2 border border-black",
     icon: <IconSignature className="h-4 w-4 text-neutral-500" />,
-    href: "/apply/openings/field-officer/application"
-  }
+    href: "/apply/openings/field-officer/application",
+  },
 ];

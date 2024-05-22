@@ -4,6 +4,7 @@ import { TextsProvider } from "@/translation";
 import Image from "next/image";
 import { MainNav } from "./(admin)/dashboard/components/main-nav";
 import { UserNav } from "./(admin)/admin/dashboard/components/user-nav";
+import Link from "next/link";
 
 export default function Home() {
   const texts = TextsProvider.get();
@@ -28,9 +29,12 @@ export default function Home() {
           <p className="md:text-1.5xl mb-4 max-w-[492px]">
             {texts.FIRST_S_SUB}
           </p>
-          <Button className="bg-primary-orange-light " size="lg">
-            {texts.APPLY}
-          </Button>
+          <Link
+            href="/apply/openings"
+            className="rounded-md p-2 hover:bg-gray-100"
+          >
+            <Button className="bg-primary-orange-light ">{texts.APPLY}</Button>
+          </Link>
         </div>
         <div className="pt-18 flex flex-col justify-center gap-5 overflow-hidden sm:flex-row md:justify-normal md:pl-4 md:pt-0">
           <Image
@@ -101,7 +105,12 @@ export default function Home() {
               {texts.THIRD_S_TITLE}
             </h2>
           </div>
-          <Button className="bg-primary-orange-light ">{texts.APPLY}</Button>
+          <Link
+            href="/apply/openings"
+            className="rounded-md p-2 hover:bg-gray-100"
+          >
+            <Button className="bg-primary-orange-light ">{texts.APPLY}</Button>
+          </Link>
         </div>
       </footer>
     </main>
