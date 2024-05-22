@@ -246,19 +246,25 @@ export default function DashboardPage() {
     data: staff,
     error: staffError,
     isValidating: isStaffValidating,
-  } = useSWR<StaffData>("http://localhost:8000/staff/dashboard", fetcher);
+  } = useSWR<StaffData>(
+    "https://enetworks-tovimikailu.koyeb.app/staff/dashboard",
+    fetcher
+  );
   const {
     data: referrals,
     error: anotherError,
     isValidating: isAnotherValidating,
-  } = useSWR<AnotherData>("http://localhost:8000/staff/referral", fetcher);
+  } = useSWR<AnotherData>(
+    "https://enetworks-tovimikailu.koyeb.app/staff/referral",
+    fetcher
+  );
 
   const {
     data: referrals1,
     error: anotherError1,
     isValidating: isAnotherValidating1,
   } = useSWR<ReferralData[]>(
-    "http://localhost:8000/staff/successful_referrals",
+    "https://enetworks-tovimikailu.koyeb.app/staff/successful_referrals",
     fetcher
   );
 

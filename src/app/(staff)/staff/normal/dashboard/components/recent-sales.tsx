@@ -34,7 +34,7 @@ export function RecentSales() {
     error: anotherError,
     isValidating: isAnotherValidating,
   } = useSWR<Success>(
-    "http://localhost:8000/staff/successful_referrals",
+    "https://enetworks-tovimikailu.koyeb.app/staff/successful_referrals",
     fetcher
   );
 

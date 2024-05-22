@@ -20,13 +20,16 @@ export default function Dashboard() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:8000/login/staff", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await fetch(
+        "https://enetworks-tovimikailu.koyeb.app/login/staff",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();

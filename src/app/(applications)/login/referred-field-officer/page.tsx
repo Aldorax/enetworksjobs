@@ -21,7 +21,7 @@ export default function Dashboard() {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/login/referred-nominated_field_officer",
+        "https://enetworks-tovimikailu.koyeb.app/login/referred-nominated_field_officer",
         {
           method: "POST",
           headers: {
