@@ -59,7 +59,7 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
-        <div className="flex-1 space-y-4 p-3 md:p-8 pt-6 md:mt-20">
+        <div className="flex-1 space-y-4 p-2 md:p-8 pt-6 md:mt-20">
           <div className="flex items-center justify-between space-y-2">
             <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
           </div>
@@ -285,7 +285,7 @@ export default function DashboardPage() {
                 </Card>
               </div>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
-                <Card className="col-span-2">
+                <Card className="col-span-2 overflow-x-scroll">
                   <CardHeader>
                     <CardTitle>Recent Onboardings</CardTitle>
                     <CardDescription>
@@ -296,7 +296,7 @@ export default function DashboardPage() {
                     <RecentSales />
                   </CardContent>
                 </Card>
-                <Card className="col-span-2">
+                <Card className="col-span-2 overflow-x-scroll">
                   <CardHeader>
                     <CardTitle>Recent Onboardings</CardTitle>
                     <CardDescription>
@@ -307,7 +307,7 @@ export default function DashboardPage() {
                     <RecentSales />
                   </CardContent>
                 </Card>
-                <Card className="col-span-2">
+                <Card className="col-span-2 overflow-x-scroll">
                   <CardHeader>
                     <CardTitle>Recent Onboardings</CardTitle>
                     <CardDescription>
