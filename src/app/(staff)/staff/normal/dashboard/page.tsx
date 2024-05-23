@@ -276,7 +276,7 @@ export default function DashboardPage() {
                       this month.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="rounded-md border overflow-x-scroll">
+                  <CardContent className="rounded-md border">
                     <RecentSales />
                   </CardContent>
                 </Card>
