@@ -21,7 +21,7 @@ const data = [
   },
   {
     name: "May",
-    total: Math.floor(Math.random() * 0) + 2,
+    total: Math.floor(Math.random() * 0) + 0,
   },
   {
     name: "Jun",

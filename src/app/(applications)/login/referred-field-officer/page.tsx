@@ -36,7 +36,7 @@ export default function Dashboard() {
       }
 
       // Redirect user to dashboard upon successful login
-      router.push("/staff/field/dashboard");
+      router.push("/staff/referred-field/dashboard");
     } catch (error) {
       console.error("Login error:", error);
       setError("Login failed. Please check your credentials.");

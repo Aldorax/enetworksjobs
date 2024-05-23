@@ -103,7 +103,7 @@ export default function DashboardPage() {
     error: staffError,
     isValidating: isStaffValidating,
   } = useSWR<StaffData>(
-    "https://enetworks-tovimikailu.koyeb.app/staff/dashboard",
+    "https://enetworks-tovimikailu.koyeb.app/field/dashboard",
     fetcher
   );
   const {
@@ -111,7 +111,7 @@ export default function DashboardPage() {
     error: anotherError,
     isValidating: isAnotherValidating,
   } = useSWR<AnotherData>(
-    "https://enetworks-tovimikailu.koyeb.app/staff/referral",
+    "https://enetworks-tovimikailu.koyeb.app/field/referral",
     fetcher
   );
 
