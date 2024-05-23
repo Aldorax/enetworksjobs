@@ -1,82 +1,85 @@
+"use client";
+import useSWR from "swr";
+import { fetcher } from "@/utils/apiUtils";
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/registry/new-york/ui/avatar";
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/registry/new-york/ui/table";
+import Link from "next/link";
+
+interface AnotherData {
+  id: number;
+  referral_id: string;
+  referred_user_card_number: string;
+  referred_user_email: string;
+  referred_user_name: string;
+  referrer_id: string;
+  timestamp: string;
+  validity: true;
+}
+
+interface Success {
+  info: AnotherData[];
+}
 
 export function RecentSales() {
+  const {
+    data: referrals,
+    error: anotherError,
+    isValidating: isAnotherValidating,
+  } = useSWR<Success>(
+    "https://enetworks-tovimikailu.koyeb.app/staff/successful_referrals",
+    fetcher
+  );
+
+  if (anotherError) {
+    return <div>{anotherError.message}</div>;
+  }
+
+  if (!referrals) {
+    return null;
+  }
+
   return (
-    <div className="space-y-8">
-      <div className="flex items-center">
-        <Avatar className="h-9 w-9">
-          <AvatarImage src="/avatars/01.png" alt="Avatar" />
-          <AvatarFallback>OM</AvatarFallback>
-        </Avatar>
-        <div className="ml-4 space-y-1">
-          <p className="text-sm font-medium leading-none">Olivia Martin</p>
-          <p className="text-muted-foreground text-sm">
-            olivia.martin@email.com
-          </p>
-        </div>
-        <div className="ml-auto font-medium">+1,999.00</div>
-      </div>
-      <div className="flex items-center">
-        <Avatar className="flex h-9 w-9 items-center justify-center space-y-0 border">
-          <AvatarImage src="/avatars/02.png" alt="Avatar" />
-          <AvatarFallback>JL</AvatarFallback>
-        </Avatar>
-        <div className="ml-4 space-y-1">
-          <p className="text-sm font-medium leading-none">Jackson Lee</p>
-          <p className="text-muted-foreground text-sm">jackson.lee@email.com</p>
-        </div>
-        <div className="ml-auto font-medium">+39.00</div>
-      </div>
-      <div className="flex items-center">
-        <Avatar className="h-9 w-9">
-          <AvatarImage src="/avatars/03.png" alt="Avatar" />
-          <AvatarFallback>IN</AvatarFallback>
-        </Avatar>
-        <div className="ml-4 space-y-1">
-          <p className="text-sm font-medium leading-none">Isabella Nguyen</p>
-          <p className="text-muted-foreground text-sm">
-            isabella.nguyen@email.com
-          </p>
-        </div>
-        <div className="ml-auto font-medium">+299.00</div>
-      </div>
-      <div className="flex items-center">
-        <Avatar className="h-9 w-9">
-          <AvatarImage src="/avatars/04.png" alt="Avatar" />
-          <AvatarFallback>WK</AvatarFallback>
-        </Avatar>
-        <div className="ml-4 space-y-1">
-          <p className="text-sm font-medium leading-none">William Kim</p>
-          <p className="text-muted-foreground text-sm">will@email.com</p>
-        </div>
-        <div className="ml-auto font-medium">+99.00</div>
-      </div>
-      <div className="flex items-center">
-        <Avatar className="h-9 w-9">
-          <AvatarImage src="/avatars/05.png" alt="Avatar" />
-          <AvatarFallback>SD</AvatarFallback>
-        </Avatar>
-        <div className="ml-4 space-y-1">
-          <p className="text-sm font-medium leading-none">Sofia Davis</p>
-          <p className="text-muted-foreground text-sm">sofia.davis@email.com</p>
-        </div>
-        <div className="ml-auto font-medium">+39.00</div>
-      </div>
-      <div className="flex items-center">
-        <Avatar className="h-9 w-9">
-          <AvatarImage src="/avatars/05.png" alt="Avatar" />
-          <AvatarFallback>SD</AvatarFallback>
-        </Avatar>
-        <div className="ml-4 space-y-1">
-          <p className="text-sm font-medium leading-none">Sofia Davis</p>
-          <p className="text-muted-foreground text-sm">sofia.davis@email.com</p>
-        </div>
-        <div className="ml-auto font-medium">+39.00</div>
-      </div>
-    </div>
+    <Table className="w-full overflow-x-scroll">
+      <TableCaption>A list of your recent Onboards.</TableCaption>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-[100px]">ID</TableHead>
+          <TableHead>Full name</TableHead>
+          <TableHead>Email</TableHead>
+          <TableHead>TimeStamp</TableHead>
+          <TableHead>Status</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {referrals?.map((onboard) => (
+          <TableRow key={onboard.id}>
+            <TableCell className="font-medium">{onboard.id}</TableCell>
+            <TableCell className="font-medium">
+              {onboard.referred_user_name}
+            </TableCell>
+            <TableCell>{onboard.referred_user_email}</TableCell>
+            <TableCell>{onboard.timestamp}</TableCell>
+            <TableCell className="text-right">
+              {onboard.validity == true ? "True" : "False"}
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+      <TableFooter>
+        <TableRow>
+          <TableCell colSpan={3}>
+            This table shows some of the recent onboardings
+          </TableCell>
+        </TableRow>
+      </TableFooter>
+    </Table>
   );
 }
