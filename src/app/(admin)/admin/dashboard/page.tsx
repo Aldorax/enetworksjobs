@@ -10,7 +10,6 @@ import {
   PageHeaderHeading,
 } from "@/components/page-header";
 import { ThemeCustomizer } from "@/components/theme-customizer";
-import { ThemesTabs } from "./tabs";
 
 export const metadata: Metadata = {
   title: "Themes",
@@ -60,13 +59,9 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
-        <div className="flex-1 space-y-4 p-8 pt-6 mt-20">
+        <div className="flex-1 space-y-4 p-3 md:p-8 pt-6 md:mt-20">
           <div className="flex items-center justify-between space-y-2">
             <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-            {/* <div className="flex items-center space-x-2">
-              <CalendarDateRangePicker />
-              <Button>Download</Button>
-            </div> */}
           </div>
           <Tabs defaultValue="overview" className="space-y-4">
             <TabsList>
