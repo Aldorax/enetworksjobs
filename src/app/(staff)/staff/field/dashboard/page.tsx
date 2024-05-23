@@ -1,6 +1,8 @@
 "use client";
 // import { type Metadata } from "next";
 import React from "react";
+import useSWR from "swr";
+import { fetcher } from "@/utils/apiUtils";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -84,8 +86,68 @@ type PaginationState = {
   pageIndex: number;
   pageSize: number;
 };
+interface StaffData {
+  monthly_target: number;
+  referrals_this_month: number;
+  referrals_this_week: number;
+  referrals_today: number;
+  total_referrals: number;
+  user_id: string;
+}
+interface Referral {
+  id: number;
+  monthly_target: number;
+  total_referrals_completed: number;
+  user_id: string;
+}
 
-const data: Payment[] = [];
+interface SuccessfulReferral {
+  id: number;
+  referral_id: number | null;
+  referred_user_card_number: string;
+  referred_user_email: string;
+  referred_user_name: string;
+  referrer_id: string;
+  timestamp: string;
+  validity: boolean;
+}
+
+interface StaffData {
+  full_name: string;
+  id: string;
+  office_status: boolean;
+  referral: Referral;
+  successful_referrals: SuccessfulReferral[];
+}
+
+interface AnotherData {
+  monthly_target: string;
+  referrals_this_month: string;
+  referrals_this_week: string;
+  referrals_today: string;
+  total_referrals: string;
+  user_id: string;
+}
+
+interface ReferralData {
+  id: number;
+  referral_id: string;
+  referred_user_card_number: string;
+  referred_user_email: string;
+  referred_user_name: string;
+  referrer_id: string;
+  timestamp: string;
+  validity: true;
+}
+
+const data: Payment[] = [
+  {
+    date: "10th may",
+    email: "lega@gmail.com",
+    id: "1234",
+    status: "pending",
+  },
+];
 
 export type Payment = {
   id: string;
@@ -180,6 +242,45 @@ export const columns: ColumnDef<Payment>[] = [
 ];
 
 export default function DashboardPage() {
+  const {
+    data: staff,
+    error: staffError,
+    isValidating: isStaffValidating,
+  } = useSWR<StaffData>(
+    "https://enetworks-tovimikailu.koyeb.app/staff/dashboard",
+    fetcher
+  );
+  const {
+    data: referrals,
+    error: anotherError,
+    isValidating: isAnotherValidating,
+  } = useSWR<AnotherData>(
+    "https://enetworks-tovimikailu.koyeb.app/staff/referral",
+    fetcher
+  );
+
+  const {
+    data: referrals1,
+    error: anotherError1,
+    isValidating: isAnotherValidating1,
+  } = useSWR<ReferralData[]>(
+    "https://enetworks-tovimikailu.koyeb.app/staff/successful_referrals",
+    fetcher
+  );
+
+  // Ensure that referrals1 is an array before mapping
+  const mappedData: Payment[] = Array.isArray(referrals1)
+    ? referrals1.map((referral) => ({
+        id: referral.id.toString(),
+        status: referral.validity ? "success" : "failed",
+        email: referral.referred_user_email,
+        date: new Date(referral.timestamp).toLocaleDateString(),
+      }))
+    : [];
+
+  // Log the mapped data for debugging purposes
+  console.log("Mapped data:", mappedData);
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -193,7 +294,7 @@ export default function DashboardPage() {
   });
 
   const table = useReactTable({
-    data,
+    data: mappedData,
     columns,
     state: {
       sorting,
@@ -214,6 +315,22 @@ export default function DashboardPage() {
   });
 
   const pageCount = table.getPageCount();
+
+  if (staffError) {
+    return <div>{staffError.message}</div>;
+  }
+
+  if (anotherError) {
+    return <div>{anotherError.message}</div>;
+  }
+
+  if (anotherError1) {
+    return <div>{anotherError1.message}</div>;
+  }
+
+  if (!staff || !referrals || !referrals1) {
+    return null;
+  }
 
   return (
     <>
@@ -258,7 +375,9 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">0</div>
+                    <div className="text-2xl font-bold">
+                      {referrals.total_referrals}
+                    </div>
                     <p className="text-xs text-muted-foreground">
                       +0.00% overall
                     </p>
@@ -267,7 +386,7 @@ export default function DashboardPage() {
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
-                      Total onboarding completed
+                      Current Week onboards
                     </CardTitle>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -285,7 +404,9 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">+0</div>
+                    <div className="text-2xl font-bold">
+                      +{referrals.referrals_this_week}
+                    </div>
                     <p className="text-xs text-muted-foreground">
                       +0.00% from last month
                     </p>
@@ -311,7 +432,9 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">+0</div>
+                    <div className="text-2xl font-bold">
+                      +{referrals.referrals_this_month}
+                    </div>
                     <p className="text-xs text-muted-foreground">
                       +0.00% from last month
                     </p>
@@ -354,10 +477,11 @@ export default function DashboardPage() {
                   <CardHeader>
                     <CardTitle>Recent Onboards</CardTitle>
                     <CardDescription>
-                      You made 265 sales this month.
+                      You carried out {referrals.referrals_this_month} onboards
+                      this month.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="rounded-md border overflow-x-scroll">
                     <RecentSales />
                   </CardContent>
                 </Card>

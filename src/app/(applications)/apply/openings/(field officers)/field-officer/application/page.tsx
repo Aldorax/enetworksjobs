@@ -46,7 +46,7 @@ export default function FieldApplication() {
 
     Object.entries(data).forEach(([key, value]) => {
       if (
-        key === "guarantor_passport" ||
+        key === "guarantor_photo" ||
         key === "profile_image" ||
         key === "signature" ||
         key === "passport_photo"
@@ -60,13 +60,16 @@ export default function FieldApplication() {
     });
 
     try {
-      const response = await fetch("http://localhost:5000/api/submit", {
-        method: "POST",
-        body: formData,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await fetch(
+        "https://enetworks-tovimikailu.koyeb.app/field/apply",
+        {
+          method: "POST",
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
       if (!accessToken) {
         setLoading(false);
@@ -80,6 +83,8 @@ export default function FieldApplication() {
       }
 
       setSuccess(true);
+      setLoading(false);
+      window.location.href = "/login/field-officer";
     } catch (error) {
       console.error(error);
       setLoading(false);
@@ -115,8 +120,12 @@ export default function FieldApplication() {
         {step === 1 && (
           <>
             <div>
-              <Label>Name</Label>
-              <Input required placeholder="John Doe" {...register("name")} />
+              <Label>Full Name</Label>
+              <Input
+                required
+                placeholder="John Doe"
+                {...register("full_name")}
+              />
             </div>
             <div>
               <Label>Enetworkspay Agent Email Address</Label>
@@ -126,6 +135,10 @@ export default function FieldApplication() {
                 placeholder="john.doe@example.com"
                 {...register("agent_email")}
               />
+            </div>
+            <div>
+              <Label>Enetworkspay Agent Card Number</Label>
+              <Input required {...register("agent_card_number")} />
             </div>
             <div>
               <Label>Password</Label>
@@ -155,6 +168,14 @@ export default function FieldApplication() {
         {step === 2 && (
           <>
             <div>
+              <Label>Date of Birth</Label>
+              <Input required type="date" {...register("date_of_birth")} />
+            </div>
+            <div>
+              <Label>Phone Number</Label>
+              <Input required {...register("phone_number")} />
+            </div>
+            <div>
               <Label>BVN</Label>
               <Input required {...register("bvn")} />
             </div>
@@ -162,10 +183,7 @@ export default function FieldApplication() {
               <Label>NIN</Label>
               <Input required {...register("nin")} />
             </div>
-            <div>
-              <Label>Enetworkspay Agent Card Number</Label>
-              <Input required {...register("agent_card_number")} />
-            </div>
+
             <div>
               <Label>Gender</Label>
               <Select
@@ -231,32 +249,14 @@ export default function FieldApplication() {
               <Input required {...register("guarantor_address")} />
             </div>
             <div>
-              <Label>Date of Birth</Label>
-              <Input required type="date" {...register("date_of_birth")} />
-            </div>
-            <div>
-              <Label>Phone Number</Label>
-              <Input required {...register("phone_number")} />
-            </div>
-            <div>
               <Label>Guarantor Passport</Label>
               <Input
                 required
                 type="file"
                 accept="image/*"
-                {...register("guarantor_passport")}
+                {...register("guarantor_photo")}
               />
-              {renderImagePreview("guarantor_passport")}
-            </div>
-            <div>
-              <Label>Profile Image</Label>
-              <Input
-                required
-                type="file"
-                accept="image/*"
-                {...register("profile_image")}
-              />
-              {renderImagePreview("profile_image")}
+              {renderImagePreview("guarantor_photo")}
             </div>
             <div>
               <Label>Signature</Label>

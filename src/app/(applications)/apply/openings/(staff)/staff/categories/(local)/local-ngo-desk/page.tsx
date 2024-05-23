@@ -119,13 +119,16 @@ export default function LocalNGODESK() {
     });
 
     try {
-      const response = await fetch("http://localhost:8000/staff/apply", {
-        method: "POST",
-        body: formData,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await fetch(
+        "https://enetworks-tovimikailu.koyeb.app/staff/apply",
+        {
+          method: "POST",
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
       if (!accessToken) {
         setLoading(false);
@@ -199,10 +202,14 @@ export default function LocalNGODESK() {
               <Label>Enetworkspay Agent Cash Card Number</Label>
               <Input
                 required
-                type="email"
-                placeholder="john.doe@example.com"
+                type="text"
+                placeholder="12345"
                 {...register("agent_card_number")}
               />
+            </div>
+            <div>
+              <Label>Password</Label>
+              <Input required type="password" {...register("password")} />
             </div>
             <div>
               <Label>Active Contact Address</Label>
@@ -210,7 +217,7 @@ export default function LocalNGODESK() {
                 required
                 type="text"
                 placeholder="123 Main St"
-                {...register("active_contact_address")}
+                {...register("address")}
               />
             </div>
             <div className="grid">
@@ -224,9 +231,8 @@ export default function LocalNGODESK() {
           <>
             <div>
               <Label>State Of Origin</Label>
-              {/* <Input required {...register("state")} /> */}
               <Select
-                onValueChange={(value) => setValue("state_of_origin", value)}
+                onValueChange={(value) => setValue("state", value)}
                 value={state || ""}
               >
                 <SelectTrigger>
@@ -242,7 +248,7 @@ export default function LocalNGODESK() {
               </Select>
             </div>
             <div>
-              <Label>Local Goverment Area</Label>
+              <Label>Local Government Area</Label>
               <Input required {...register("lga")} />
             </div>
             <div>
@@ -266,8 +272,6 @@ export default function LocalNGODESK() {
                   ))}
                 </SelectContent>
               </Select>
-
-              {/* <p className="text-red-500">{String(errors.gender?.message)}</p> */}
             </div>
             <div>
               <section className="grid gap-2">
@@ -297,7 +301,11 @@ export default function LocalNGODESK() {
             </div>
             <div>
               <Label>Next of Kin Email Address</Label>
-              <Input required {...register("next_of_kin_email_address")} />
+              <Input
+                required
+                type="email"
+                {...register("next_of_kin_email_address")}
+              />
             </div>
             <div>
               <Label>Guarantor Name</Label>
@@ -323,13 +331,12 @@ export default function LocalNGODESK() {
           <>
             <div>
               <Label>What language do you speak?</Label>
-              <Input required {...register("languages")} />
+              <Input required {...register("language")} />
             </div>
             <div>
               <Label>What Position are you applying for?</Label>
-              {/* <Input required type="date" {...register("date_of_birth")} /> */}
               <Select
-                onValueChange={(value) => setValue("preferred_position", value)}
+                onValueChange={(value) => setValue("position", value)}
                 value={position || ""}
               >
                 <SelectTrigger>
@@ -347,7 +354,7 @@ export default function LocalNGODESK() {
             <div>
               <Label>What state do you want to work in?</Label>
               <Select
-                onValueChange={(value) => setValue("preferred_location", value)}
+                onValueChange={(value) => setValue("position_state", value)}
                 value={workState || ""}
               >
                 <SelectTrigger>
@@ -368,9 +375,16 @@ export default function LocalNGODESK() {
                 required
                 type="file"
                 accept="image/*"
-                {...register("image")}
+                {...register("passport_photo")}
               />
-              {renderImagePreview("image")}
+              {/* {imagePreview && (
+                <img
+                  src={imagePreview}
+                  alt="Passport Preview"
+                  className="mt-2"
+                />
+              )} */}
+              {renderImagePreview("passport_photo")}
             </div>
             <div className="flex justify-between">
               <Button color="primary" onClick={prevStep}>

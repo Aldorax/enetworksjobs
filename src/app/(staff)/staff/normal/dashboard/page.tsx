@@ -347,7 +347,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between space-y-2">
             <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
           </div>
-          <Tabs defaultValue="analytics" className="space-y-4">
+          <Tabs defaultValue="overview" className="space-y-4">
             <TabsList>
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="analytics">Analytics</TabsTrigger>
@@ -481,7 +481,7 @@ export default function DashboardPage() {
                       this month.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="rounded-md border overflow-x-scroll">
                     <RecentSales />
                   </CardContent>
                 </Card>

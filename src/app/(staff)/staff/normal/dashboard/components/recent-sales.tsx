@@ -47,7 +47,7 @@ export function RecentSales() {
   }
 
   return (
-    <Table>
+    <Table className="w-full overflow-x-scroll">
       <TableCaption>A list of your recent Onboards.</TableCaption>
       <TableHeader>
         <TableRow>
