@@ -1,4 +1,3 @@
-import image from "/public/images/medium-shot-people-looking-laptop.jpg";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -23,6 +22,14 @@ export const BentoGrid = ({
   );
 };
 
+// Define the interface for the image properties
+interface ImageProps {
+  src: string;
+  alt?: string;
+  width?: number;
+  height?: number;
+}
+
 export const BentoGridItem = ({
   className,
   title,
@@ -30,6 +37,7 @@ export const BentoGridItem = ({
   header,
   icon,
   href,
+  image, // Now using the ImageProps interface
 }: {
   className?: string;
   title?: string | React.ReactNode;
@@ -37,7 +45,28 @@ export const BentoGridItem = ({
   header?: React.ReactNode;
   icon?: React.ReactNode;
   href: string;
+  image: ImageProps | string; // Accepting both ImageProps object and string
 }) => {
+  const renderImage = () => {
+    if (typeof image === "string") {
+      // If image is a string, treat it as a URL
+      return <img src={image} alt="" className="w-full h-60 object-cover" />;
+    } else if (image && typeof image.src === "string") {
+      // If image is an object with a string src, render using Next.js Image component
+      return (
+        <Image
+          src={image.src}
+          alt={image.alt || ""}
+          width={image.width || 1000} // Default width
+          height={image.height || 1000} // Default height
+          className="w-full h-60 object-cover" // Ensure image covers the div
+        />
+      );
+    }
+    // Fallback case if no valid image source is found
+    return null;
+  };
+
   return (
     <div
       className={cn(
@@ -45,15 +74,7 @@ export const BentoGridItem = ({
         className
       )}
     >
-      <Image
-        src={image}
-        alt="image"
-        sizes="sm"
-        className="w-full h-60 bg-red-400"
-        width={1000}
-        height={1000}
-      />
-      {/* {header} */}
+      {renderImage()}
       <div className="transition duration-200 group-hover/bento:translate-x-2">
         {icon}
         <div className="mb-2 font-sans font-bold text-neutral-600 dark:text-neutral-200 flex items-center justify-between p-4">
@@ -65,9 +86,6 @@ export const BentoGridItem = ({
             Apply
           </Link>
         </div>
-        {/* <div className="font-sans text-xs font-normal text-neutral-600 dark:text-neutral-300">
-          {description}
-        </div> */}
       </div>
     </div>
   );

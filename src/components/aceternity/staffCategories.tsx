@@ -5,6 +5,8 @@ import {
   IconFileBroken,
   IconSignature,
 } from "@tabler/icons-react";
+import indoor from "/public/images/medium-shot-man-working-as-lawyer.jpg";
+import last from "/public/images/black-men-cafe-have-business.jpg";
 
 export function StaffCategories() {
   return (
@@ -18,6 +20,7 @@ export function StaffCategories() {
           className={item.className}
           icon={item.icon}
           href={item.href}
+          image={item.image}
         />
       ))}
     </BentoGrid>
@@ -34,6 +37,10 @@ const items = [
     className: "md:col-span-1 border border-black",
     icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
     href: "/apply/openings/staff/categories/state-govt-office",
+    image: {
+      src: indoor.src,
+      alt: "Portrait of professional elegant businessman",
+    },
   },
   {
     title: "State N.G.O Desk Office Position",
@@ -43,6 +50,10 @@ const items = [
     className: "md:col-span-1 border border-black",
     icon: <IconFileBroken className="h-4 w-4 text-neutral-500" />,
     href: "/apply/openings/staff/categories/state-ngo-desk",
+    image: {
+      src: indoor.src,
+      alt: "Portrait of professional elegant businessman",
+    },
   },
   {
     title: "Local Govt. Business Office Positions",
@@ -51,6 +62,10 @@ const items = [
     className: "md:col-span-1 border border-black",
     icon: <IconSignature className="h-4 w-4 text-neutral-500" />,
     href: "/apply/openings/staff/categories/local-govt-office",
+    image: {
+      src: last.src,
+      alt: "Portrait of professional elegant businessman",
+    },
   },
   {
     title: "Local Govt. N.G.O Desk Office Postions",
@@ -59,5 +74,9 @@ const items = [
     className: "md:col-span-1 border border-black",
     icon: <IconSignature className="h-4 w-4 text-neutral-500" />,
     href: "/apply/openings/staff/categories/local-ngo-desk",
+    image: {
+      src: last.src,
+      alt: "Portrait of professional elegant businessman",
+    },
   },
 ];

@@ -1,7 +1,7 @@
 "use client";
 import useSWR from "swr";
 import { fetcher } from "@/utils/apiUtils";
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -126,6 +126,48 @@ export default function DashboardPage() {
   if (!staff || !referrals) {
     return null;
   }
+
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (newPassword !== confirmPassword) {
+      setMessage("New passwords do not match");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token"); // Get the JWT token from local storage or your auth context
+
+      const response = await fetch("http://localhost:8000/change-password", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          oldPassword,
+          newPassword,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        setMessage(errorData.message || "Error changing password");
+        return;
+      }
+
+      const data = await response.json();
+      setMessage(data.message || "Password changed successfully");
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setMessage("Error changing password");
+    }
+  };
 
   return (
     <>
@@ -490,10 +532,37 @@ export default function DashboardPage() {
                           </CardDescription>
                         </CardHeader>
                         <CardContent>
-                          <form className="grid gap-2">
-                            <Input placeholder="Old Password" />
-                            <Input placeholder="New Password" />
-                            <Input placeholder="Confirm New Password" />
+                          <form onSubmit={handleSubmit} className="grid gap-2">
+                            <div>
+                              <Label>Old Password</Label>
+                              <Input
+                                type="password"
+                                value={oldPassword}
+                                onChange={(e) => setOldPassword(e.target.value)}
+                                required
+                              />
+                            </div>
+                            <div>
+                              <Label>New Password</Label>
+                              <Input
+                                type="password"
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                                required
+                              />
+                            </div>
+                            <div>
+                              <Label>Confirm New Password</Label>
+                              <Input
+                                type="password"
+                                value={confirmPassword}
+                                onChange={(e) =>
+                                  setConfirmPassword(e.target.value)
+                                }
+                                required
+                              />
+                            </div>
+                            <button type="submit">Change Password</button>
                           </form>
                         </CardContent>
                         <CardFooter className="border-t px-6 py-4">

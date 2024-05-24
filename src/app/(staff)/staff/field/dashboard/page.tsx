@@ -1,7 +1,8 @@
 "use client";
 import useSWR from "swr";
 import { fetcher } from "@/utils/apiUtils";
-import React from "react";
+import React, { useState } from "react";
+import { useToast } from "@/registry/new-york/ui/use-toast";
 import {
   Card,
   CardContent,
@@ -46,6 +47,7 @@ import { Input } from "@/registry/new-york/ui/input";
 import { Checkbox } from "@/registry/new-york/ui/checkbox";
 import { Label } from "@/registry/new-york/ui/label";
 import Analytics from "./components/analytics";
+import ChangePassword from "./components/changePassword";
 
 interface StaffData {
   monthly_target: number;
@@ -98,6 +100,7 @@ export type Payment = {
 };
 
 export default function DashboardPage() {
+  const { toast } = useToast();
   const {
     data: staff,
     error: staffError,
@@ -490,11 +493,7 @@ export default function DashboardPage() {
                           </CardDescription>
                         </CardHeader>
                         <CardContent>
-                          <form className="grid gap-2">
-                            <Input placeholder="Old Password" />
-                            <Input placeholder="New Password" />
-                            <Input placeholder="Confirm New Password" />
-                          </form>
+                          <ChangePassword />
                         </CardContent>
                         <CardFooter className="border-t px-6 py-4">
                           <Button>Save</Button>

@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { AiOutlineCheck, AiOutlineLoading } from "react-icons/ai";
 
-import image from "/public/images/medium-shot-people-looking-laptop.jpg";
+import image from "/public/images/portrait-professional-elegant-businessman.jpg";
 import { MdSend } from "react-icons/md";
 import { Label } from "@/components/ui/label";
 import {
@@ -411,7 +411,7 @@ export default function StateGovtOffice() {
           alt="working"
           width={1000}
           height={1000}
-          className="w-auto h-full bg-cover"
+          className="w-full h-screen object-cover"
         />
       </div>
     </div>

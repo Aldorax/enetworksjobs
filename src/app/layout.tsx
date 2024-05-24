@@ -4,6 +4,7 @@ import "./globals.css";
 import { TextsProvider } from "@/translation";
 import { MainNav } from "./(admin)/dashboard/components/main-nav";
 import { UserNav } from "./(admin)/admin/dashboard/components/user-nav";
+import { Toaster } from "@/registry/new-york/ui/toaster";
 
 const texts = TextsProvider.get();
 
@@ -11,14 +12,14 @@ const inter = Inter({
   display: "swap",
   style: "normal",
   subsets: ["latin"],
-  variable: "--font-inter"
+  variable: "--font-inter",
 });
 
 const spaceGrotesk = Space_Grotesk({
   display: "swap",
   style: "normal",
   subsets: ["latin"],
-  variable: "--font-space-grotesk"
+  variable: "--font-space-grotesk",
 });
 
 export const metadata: Metadata = {
@@ -28,12 +29,12 @@ export const metadata: Metadata = {
     title: "E-networks Jobs",
     description: texts.DESCRIPTION,
     url: "https://www.enetworksjobs.com.ng",
-    type: "website"
-  }
+    type: "website",
+  },
 };
 
 export default function RootLayout({
-  children
+  children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
@@ -43,13 +44,8 @@ export default function RootLayout({
       className={`${inter.variable} ${spaceGrotesk.variable} bg-[#fff]`}
     >
       <body>
-        {/* <div className="fixed z-[995] flex h-16 w-full items-center border-b border-black bg-white px-4 text-black">
-          <MainNav className="mx-6" />
-          <div className="ml-auto flex items-center space-x-4">
-            <UserNav />
-          </div>
-        </div> */}
-        {children}
+        <main>{children}</main>
+        <Toaster />
       </body>
     </html>
   );

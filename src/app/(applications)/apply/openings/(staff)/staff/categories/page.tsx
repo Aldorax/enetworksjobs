@@ -156,7 +156,9 @@ export default function StaffCat() {
       </div>
       {/* Categories */}
       <div className="flex h-full w-full max-w-full flex-col bg-gray-200 p-4 md:p-10 py-18 text-black md:h-screen">
-        <StaffCategories />
+        <section className="mt-10">
+          <StaffCategories />
+        </section>
         <div className="mt-4 w-full p-4 text-black">
           <h1>
             Do you want to re-apply instead? If so,{" "}

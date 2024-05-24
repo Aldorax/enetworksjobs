@@ -1,5 +1,8 @@
 import React from "react";
 import { BentoGrid, BentoGridItem } from "@/components/aceternity/bentoGrids2";
+import office from "/public/images/male-employee-his-new-office-job.jpg";
+import office2 from "/public/images/modern-office-space-interior.jpg";
+import office3 from "/public/images/online-school-equipment-home.jpg";
 import {
   IconClipboardCopy,
   IconFileBroken,
@@ -18,6 +21,7 @@ export function BentoGridSecondDemo3() {
           className={item.className}
           icon={item.icon}
           href={item.href}
+          image={item.image}
         />
       ))}
     </BentoGrid>
@@ -34,6 +38,10 @@ const items = [
     className: "md:col-span-1 border border-black",
     icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
     href: "/login/staff",
+    image: {
+      src: office.src,
+      alt: "Portrait of professional elegant businessman",
+    },
   },
   {
     title: "Nominated Field Officer Position",
@@ -42,6 +50,10 @@ const items = [
     className: "md:col-span-1 border border-black",
     icon: <IconFileBroken className="h-4 w-4 text-neutral-500" />,
     href: "/login/referred-field-officer",
+    image: {
+      src: office2.src,
+      alt: "Portrait of professional elegant businessman",
+    },
   },
   {
     title: "Field Officer Position",
@@ -50,5 +62,9 @@ const items = [
     className: "md:col-span-2 border border-black",
     icon: <IconSignature className="h-4 w-4 text-neutral-500" />,
     href: "/login/field-officer",
+    image: {
+      src: office3.src,
+      alt: "Portrait of professional elegant businessman",
+    },
   },
 ];

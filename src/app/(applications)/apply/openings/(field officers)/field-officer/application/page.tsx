@@ -1,7 +1,7 @@
 "use client";
 // components/Input requiredForm.tsx
 import { useState, useEffect } from "react";
-import image from "/public/images/medium-shot-people-looking-laptop.jpg";
+import image from "/public/images/office-chair-still-life.jpg";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
@@ -303,7 +303,7 @@ export default function FieldApplication() {
           alt="working"
           width={1000}
           height={1000}
-          className="w-auto h-full bg-cover"
+          className="w-full h-screen object-cover"
         />
       </div>
     </div>
