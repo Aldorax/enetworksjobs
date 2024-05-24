@@ -35,7 +35,10 @@ export default function Dashboard() {
         throw new Error("Login failed");
       }
 
-      // Redirect user to dashboard upon successful login
+      const responseData = await response.json();
+      const { access_token } = responseData;
+      console.log(access_token);
+      localStorage.setItem("access_token", access_token);
       router.push("/staff/referred-field/dashboard");
     } catch (error) {
       console.error("Login error:", error);
